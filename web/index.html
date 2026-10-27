@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyspanicus: Cantar de mio Cid</title>
+<meta name="description" content="Lector del Cantar de mio Cid con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#26201a; --desk-ink:#eadfc4; --desk-soft:#a89878;
+  --vell:#e6dabb; --vell2:#d8c9a2; --rule:#c4b48a;
+  --ink:#2b2119; --ink-soft:#6b5a43;
+  --minio:#a3281d; --lapis:#28478a;
+}
+*{box-sizing:border-box}
+html{background:var(--desk);color:var(--desk-ink)}
+body{margin:0;font:19px/1.65 Cardo,"Palatino Linotype","Book Antiqua",Cambria,"Segoe UI Historic","Segoe UI Symbol",serif;-webkit-text-size-adjust:100%}
+a{color:inherit}
+button,select,input{font:inherit;color:inherit}
+
+/* barra superior sobre el escritorio */
+.top{max-width:72rem;margin:0 auto;padding:1.2rem 1.25rem .9rem;display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;justify-content:space-between}
+.top h1{margin:0;font-size:1.5rem;font-weight:400;font-style:italic;letter-spacing:.01em}
+.top h1 span{font-style:normal;font-size:.9rem;color:var(--desk-soft);margin-left:.6rem}
+.ctl{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.top button,.top select,.top input{background:transparent;border:1px solid #6f6044;border-radius:3px;padding:.3rem .65rem;font-size:.95rem}
+.top button{cursor:pointer;min-width:2.2rem}
+.top button:hover:not(:disabled){background:#3a3026}
+.top button:disabled{opacity:.35;cursor:default}
+.top select option{color:#222;background:#fff}
+.top input{width:12rem}
+.top input::placeholder{color:var(--desk-soft);font-style:italic}
+:is(button,select,input,.w,a):focus-visible{outline:2px solid #e9b84a;outline-offset:2px}
+
+/* la hoja */
+.hoja{max-width:72rem;margin:0 auto 2rem;background:var(--vell);color:var(--ink);display:grid;grid-template-columns:minmax(0,1.55fr) minmax(19rem,1fr);box-shadow:0 1px 0 #0006,0 18px 40px -12px #000a;border-radius:2px}
+.texto{padding:1.4rem 1.2rem 1.6rem 1.4rem}
+.folio{margin:0 0 .6rem;font-size:1.05rem;font-weight:400;font-style:italic;color:var(--minio)}
+.verso{position:relative;margin:0;padding-left:3rem;line-height:2.15rem;border-bottom:1px solid rgba(120,100,60,.28);font-size:1.12rem}
+.num{position:absolute;left:0;width:2.2rem;text-align:right;color:var(--lapis);font-size:.8rem;font-style:italic}
+.pie-folio{display:flex;justify-content:space-between;margin-top:1.2rem;padding-left:3rem}
+.pie-folio button{background:none;border:0;padding:.2rem 0;cursor:pointer;color:var(--ink-soft);font-style:italic}
+.pie-folio button:hover:not(:disabled){color:var(--minio)}
+.pie-folio button:disabled{opacity:.3;cursor:default}
+
+.w{cursor:pointer;border-radius:2px}
+.w.v{text-decoration:underline;text-decoration-color:var(--lapis);text-decoration-thickness:2px;text-underline-offset:.2em}
+.w:hover{background:rgba(163,40,29,.14)}
+.w.sel{background:var(--minio);color:var(--vell);text-decoration-color:var(--vell)}
+
+/* la glosa: el margen de la hoja */
+.glosa{border-left:4px double var(--rule);background:linear-gradient(90deg,#0000,#0000)}
+.glosa-in{position:sticky;top:0;max-height:100vh;overflow:auto;padding:1.4rem 1.3rem 2rem}
+.glosa-cerrar{display:none}
+.pal{margin:0;font-size:2rem;line-height:1.2;font-style:italic;font-weight:400;color:var(--minio);overflow-wrap:anywhere}
+.donde{margin:.1rem 0 .6rem;font-size:.9rem;color:var(--ink-soft)}
+.estado{font-size:.95rem;font-style:italic;margin:0 0 .4rem}
+.lema{border-top:1px solid var(--rule);margin-top:1rem;padding-top:.2rem}
+.lema h3{margin:.7rem 0 .1rem;font-size:1.3rem;font-weight:700;overflow-wrap:anywhere}
+.pos{margin:0 0 .5rem;font-size:.9rem;font-style:italic;color:var(--lapis)}
+dl.datos{display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;margin:0;font-size:.95rem;line-height:1.45}
+dl.datos dt{color:var(--ink-soft);font-style:italic}
+dl.datos dd{margin:0;overflow-wrap:anywhere}
+.nota{font-size:.85rem;color:var(--ink-soft);margin:.5rem 0 0}
+.evo{margin:.8rem 0 0;padding:.6rem .8rem;border-left:3px solid var(--minio);background:rgba(163,40,29,.07);font-size:.95rem}
+.evo.vacio{border-left-color:var(--rule);background:none;font-style:italic;color:var(--ink-soft)}
+.evo ol{list-style:none;margin:.2rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem .5rem}
+.evo li+li::before{content:"→";margin-right:.5rem;color:var(--minio)}
+.evo li small{display:block;color:var(--ink-soft);font-style:italic}
+.enlace{display:inline-block;margin-top:.7rem;font-size:.95rem;color:var(--lapis)}
+.vacia p{margin:.6rem 0}
+.resultados{list-style:none;margin:.8rem 0 0;padding:0}
+.resultados li{border-top:1px solid var(--rule)}
+.resultados button{display:block;width:100%;text-align:left;background:none;border:0;padding:.55rem .1rem;cursor:pointer;font-size:.95rem;line-height:1.4}
+.resultados button:hover{background:rgba(163,40,29,.08)}
+.resultados .ref{display:block;font-style:italic;color:var(--ink-soft);font-size:.85rem}
+.resultados mark{background:none;color:var(--minio);font-weight:700}
+
+.pie{max-width:72rem;margin:0 auto;padding:0 1.25rem 3rem;font-size:.88rem;line-height:1.5;color:var(--desk-soft)}
+.pie p{margin:.4rem 0;max-width:60rem}
+
+@media (max-width:860px){
+  body{font-size:18px}
+  .hoja{grid-template-columns:1fr;border-radius:0}
+  .verso{font-size:1.05rem;padding-left:2.4rem}
+  .num{width:1.9rem}
+  .top input{width:9.5rem}
+  .glosa{position:fixed;left:0;right:0;bottom:0;z-index:5;border-left:0;border-top:4px double var(--minio);background:var(--vell2);max-height:58vh;transform:translateY(105%);transition:transform .2s ease;box-shadow:0 -12px 30px #0006}
+  .glosa.abierta{transform:none}
+  .glosa-in{position:static;max-height:58vh;padding-top:1rem}
+  .glosa-cerrar{display:block;position:absolute;top:.4rem;right:.6rem;background:none;border:0;font-size:1.6rem;line-height:1;padding:.2rem .5rem;cursor:pointer;color:var(--ink-soft)}
+  .pie{padding-bottom:62vh}
+}
+@media (prefers-reduced-motion:reduce){.glosa{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Hyspanicus<span>Cantar de mio Cid</span></h1>
+  <div class="ctl">
+    <button id="ant" type="button" aria-label="Folio anterior">‹</button>
+    <select id="selFolio" aria-label="Ir a un folio"></select>
+    <button id="sig" type="button" aria-label="Folio siguiente">›</button>
+    <input id="q" type="search" placeholder="Buscar una palabra" aria-label="Buscar una forma o un lema" autocomplete="off">
+  </div>
+</header>
+
+<main class="hoja">
+  <section class="texto" id="texto" aria-label="Texto del Cantar"></section>
+  <aside class="glosa" id="glosa" aria-live="polite" aria-label="Glosa de la palabra elegida">
+    <button class="glosa-cerrar" id="cerrar" type="button" aria-label="Cerrar la glosa">×</button>
+    <div class="glosa-in" id="glosaIn"></div>
+  </aside>
+</main>
+
+<footer class="pie">
+  <p>Texto: <em>Cantar de mío Cid</em>, copia de 1300-1400 (BNE, Vitrina 7-17), transcripción de Steven Kirby en ADMYTE 0, tomada del corpus de textos del DEMel (<a href="https://doi.org/10.18453/rosdok_id00005463">doi:10.18453/rosdok_id00005463</a>). Léxico: Diccionario del Español Medieval electrónico, Universidad de Rostock (<a href="https://doi.org/10.18453/rosdok_id00005462">doi:10.18453/rosdok_id00005462</a>). Ambos con licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a>.</p>
+  <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos.</p>
+</footer>
+
+<script src="data/cid.js"></script>
+<script src="data/evolucion.js"></script>
+<script>
+(function(){
+"use strict";
+var D=window.HYS_CID, EVO=window.HYS_EVO||{};
+var F=D.folios, LM=D.lemmas;
+var LET="a-záéíóúñçüſ";
+var reParts=new RegExp("^([^"+LET+"]*)(.*?)([^"+LET+"]*)$","i");
+var reLet=new RegExp("["+LET+"]","i");
+var POS={subst_m:"sustantivo masculino",subst_f:"sustantivo femenino",subst_all:"sustantivo",verb:"verbo",verb_prnl:"verbo pronominal",verb_all:"verbo",adj:"adjetivo",adv:"adverbio",art:"artículo",conj:"conjunción",interj:"interjección",prep:"preposición",pron:"pronombre",part:"participio",ger:"gerundio",name_topo:"topónimo",name_anthropo:"antropónimo",name_all:"nombre propio",name_other:"otro nombre propio",subst_mf:"sustantivo masculino y femenino"};
+
+var $=function(id){return document.getElementById(id)};
+var texto=$("texto"), glosa=$("glosa"), gin=$("glosaIn"), selF=$("selFolio"), q=$("q");
+var offs=[],acc=0; F.forEach(function(f){offs.push(acc);acc+=f.lines.length;});
+var cur=0, selEl=null;
+
+function fold(s){return s.replace(/v/g,"u").replace(/j/g,"i").replace(/y/g,"i").replace(/ç/g,"z").replace(/ſ/g,"s").replace(/ph/g,"f");}
+function core(s){return (s.toLowerCase().match(new RegExp("["+LET+"]","g"))||[]).join("");}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function rango(f){if(!f||f[0]==null)return "sin fecha";return f[0]===f[1]?String(f[0]):f[0]+"–"+f[1];}
+function posTxt(c){
+  var ks=(c||[]).filter(function(k){
+    if(!/_all$/.test(k))return true;
+    var fam=k.split("_")[0];
+    return !(c||[]).some(function(o){return o!==k&&o.split("_")[0]===fam&&!/_all$/.test(o);});
+  });
+  var out=[];ks.forEach(function(k){var t=POS[k]||k;if(out.indexOf(t)<0)out.push(t);});return out.join(", ");
+}
+
+/* ---------- folios ---------- */
+function showFolio(i,focus){
+  cur=Math.max(0,Math.min(F.length-1,i)); selEl=null;
+  var f=F[cur]; texto.textContent="";
+  texto.appendChild(el("h2","folio","fol. "+f.n));
+  f.lines.forEach(function(line,vi){
+    var p=el("p","verso"), n=offs[cur]+vi+1;
+    p.appendChild(el("span","num",n%5===0?String(n):""));
+    line.forEach(function(tok,ti){
+      if(reLet.test(tok.w)){
+        var m=tok.w.match(reParts);
+        if(m[1])p.appendChild(document.createTextNode(m[1]));
+        var s=el("span","w"+(tok.v?" v":""),m[2]);
+        s.tabIndex=0; s.setAttribute("role","button");
+        s.dataset.v=vi; s.dataset.t=ti;
+        p.appendChild(s);
+        if(m[3])p.appendChild(document.createTextNode(m[3]));
+      }else p.appendChild(document.createTextNode(tok.w));
+      p.appendChild(document.createTextNode(" "));
+    });
+    texto.appendChild(p);
+  });
+  var pie=el("div","pie-folio");
+  var b1=el("button",null,"‹ folio anterior"), b2=el("button",null,"folio siguiente ›");
+  b1.type=b2.type="button"; b1.disabled=cur===0; b2.disabled=cur===F.length-1;
+  b1.onclick=function(){go(cur-1)}; b2.onclick=function(){go(cur+1)};
+  pie.appendChild(b1);pie.appendChild(b2);texto.appendChild(pie);
+  selF.value=String(cur); $("ant").disabled=cur===0; $("sig").disabled=cur===F.length-1;
+  try{history.replaceState(null,"","#fol="+f.n);}catch(e){}
+  if(focus){var t=texto.querySelector('.w[data-v="'+focus.v+'"][data-t="'+focus.t+'"]');if(t){pick(t);t.scrollIntoView({block:"center"});}}
+}
+function go(i){showFolio(i);window.scrollTo({top:0});if(glosa.classList.contains("abierta")&&innerWidth<=860)glosa.classList.remove("abierta");}
+
+/* ---------- glosa ---------- */
+function vacia(){
+  gin.textContent="";
+  var d=el("div","vacia");
+  d.appendChild(el("p","estado","Tocá una palabra del texto para ver su lema, sus formas documentadas y desde cuándo se registra."));
+  d.appendChild(el("p","nota","Las palabras subrayadas en azul están anotadas por el DEMel en este pasaje, así que su lema es seguro. En las demás, la glosa propone los lemas posibles según la grafía."));
+  gin.appendChild(d);
+}
+function lemaBloque(lid){
+  var L=LM[lid]; if(!L)return null;
+  var b=el("section","lema");
+  b.appendChild(el("h3",null,L.n));
+  var pt=posTxt(L.c); if(pt)b.appendChild(el("p","pos",pt));
+  var dl=el("dl","datos");
+  function row(k,v){dl.appendChild(el("dt",null,k));dl.appendChild(el("dd",null,v));}
+  if(L.fm&&L.fm.length)row("Formas",L.fm.join(", "));
+  if(L.f&&L.f[0]!=null)row("Primera documentación",rango(L.f)+(L.f[2]?", en "+L.f[2]:""));
+  if(L.u!=null)row("Última fecha",L.u?"hasta "+L.u:"sin dato");
+  row("En el DEMel",L.d+" documentaciones en "+L.s+(L.s===1?" fuente":" fuentes"));
+  if(!L.x)b.appendChild(dl);
+  var ev=EVO[lid]||EVO[L.n], box;
+  if(ev&&ev.cadena&&ev.cadena.length){
+    box=el("div","evo"); box.appendChild(el("strong",null,"Evolución"));
+    var ol=el("ol");
+    ev.cadena.forEach(function(e){var li=el("li",null,e.forma);if(e.etapa)li.appendChild(el("small",null,e.etapa));ol.appendChild(li);});
+    box.appendChild(ol);
+    if(ev.cambios&&ev.cambios.length)box.appendChild(el("p","nota","Cambios: "+ev.cambios.join("; ")));
+    if(ev.marca)box.appendChild(el("p","nota","Tipo: "+ev.marca));
+    if(ev.fuentes&&ev.fuentes.length)box.appendChild(el("p","nota","Fuentes: "+ev.fuentes.join("; ")));
+  }else{
+    box=el("div","evo vacio","La evolución de esta palabra todavía no está en la tabla curada.");
+  }
+  b.appendChild(box);
+  var a=el("a","enlace","Ver el lema en el DEMel");
+  a.href="https://purl.uni-rostock.de/demel/"+lid; a.target="_blank"; a.rel="noopener";
+  if(!L.x)b.appendChild(a);else b.appendChild(el("p","nota","Este lema no figura en el DEMel, por eso no hay formas ni fechas."));
+  return b;
+}
+function glosar(vi,ti){
+  var tok=F[cur].lines[vi][ti], m=tok.w.match(reParts);
+  gin.textContent="";
+  gin.appendChild(el("h2","pal",m[2]));
+  gin.appendChild(el("p","donde","fol. "+F[cur].n+", verso "+(offs[cur]+vi+1)));
+  var est;
+  if(tok.v)est="El DEMel anota esta palabra en este pasaje.";
+  else if(tok.x===1)est="Lema fijado a mano en la tabla de lemas.";
+  else if(tok.x===2)est="Lema propuesto en la tabla de lemas, todavía sin revisar.";
+  else if(tok.g)est="El DEMel no documenta esta forma como una sola palabra. Se separó en «"+tok.g.join("» + «")+"»; la separación puede ser incorrecta.";
+  else if(tok.d)est="Había varios lemas posibles para esta forma. Se muestra el más documentado en el DEMel.";
+  else if(tok.m)est="El DEMel no documenta esta forma. El lema se dedujo por la terminación y puede ser incorrecto.";
+  else if(tok.l&&tok.l.length>1)est="Lemas posibles según la grafía. El DEMel no anota esta palabra en este pasaje.";
+  else if(tok.l)est="Lema probable según la grafía. El DEMel no anota esta palabra en este pasaje.";
+  else est="El DEMel no tiene un lema para esta forma. Puede ser un nombre propio, una forma pegada (como «enel») o una forma no documentada.";
+  gin.appendChild(el("p","estado",est));
+  (tok.l||[]).forEach(function(lid){var b=lemaBloque(lid);if(b)gin.appendChild(b);});
+  gin.scrollTop=0;
+  if(innerWidth<=860)glosa.classList.add("abierta");
+}
+function pick(span){
+  if(selEl)selEl.classList.remove("sel");
+  selEl=span; span.classList.add("sel");
+  glosar(+span.dataset.v,+span.dataset.t);
+}
+
+/* ---------- búsqueda ---------- */
+var idx=null, lemKey={};
+function keysOf(lid){
+  if(lemKey[lid])return lemKey[lid];
+  var L=LM[lid]; var ks=[];
+  if(L)L.n.toLowerCase().split(" / ").forEach(function(p){
+    var c=p.replace(/\(se\)|[\[\]\d]/g,"").replace(/,\s*(a|as)\b/g,"").trim();
+    if(c)ks.push(fold(c));
+  });
+  return (lemKey[lid]=ks);
+}
+function buildIdx(){
+  idx=[];
+  F.forEach(function(f,fi){f.lines.forEach(function(line,vi){line.forEach(function(tok,ti){
+    if(!reLet.test(tok.w))return;
+    var forma=fold(core(tok.w)), lem=[];
+    if(tok.l&&(tok.v||tok.m||tok.x||tok.g||tok.d||tok.l.length===1))tok.l.forEach(function(l){keysOf(l).forEach(function(k){lem.push(k);});});
+    idx.push([fi,vi,ti,forma,lem]);
+  });});});
+}
+function buscar(txt){
+  var key=fold(core(txt.trim()));
+  if(!key){vacia();return;}
+  if(!idx)buildIdx();
+  var res=idx.filter(function(r){return r[3]===key||r[4].indexOf(key)>=0;});
+  gin.textContent="";
+  gin.appendChild(el("h2","pal","«"+txt.trim()+"»"));
+  if(!res.length){
+    gin.appendChild(el("p","estado","No hay resultados. Probá con otra grafía (u/v, i/j, ç/z) o con el lema."));
+    if(innerWidth<=860)glosa.classList.add("abierta");
+    return;
+  }
+  gin.appendChild(el("p","estado",res.length+(res.length===1?" aparición":" apariciones")+(res.length>100?" (se muestran las primeras 100)":"")+"."));
+  var ul=el("ul","resultados");
+  res.slice(0,100).forEach(function(r){
+    var li=el("li"), b=el("button"); b.type="button";
+    b.appendChild(el("span","ref","fol. "+F[r[0]].n+", verso "+(offs[r[0]]+r[1]+1)));
+    var line=F[r[0]].lines[r[1]];
+    line.forEach(function(t,k){
+      if(k===r[2]){b.appendChild(el("mark",null,t.w));}else b.appendChild(document.createTextNode(t.w));
+      b.appendChild(document.createTextNode(" "));
+    });
+    b.onclick=function(){showFolio(r[0],{v:r[1],t:r[2]});};
+    li.appendChild(b);ul.appendChild(li);
+  });
+  gin.appendChild(ul);
+  if(innerWidth<=860)glosa.classList.add("abierta");
+}
+
+/* ---------- eventos ---------- */
+F.forEach(function(f,i){var o=document.createElement("option");o.value=String(i);o.textContent="fol. "+f.n;selF.appendChild(o);});
+selF.onchange=function(){go(+selF.value)};
+$("ant").onclick=function(){go(cur-1)}; $("sig").onclick=function(){go(cur+1)};
+$("cerrar").onclick=function(){glosa.classList.remove("abierta")};
+q.addEventListener("input",function(){var v=q.value;if(!v.trim())vacia();else buscar(v);});
+q.addEventListener("keydown",function(e){if(e.key==="Escape"){q.value="";vacia();}});
+texto.addEventListener("click",function(e){var w=e.target.closest(".w");if(w)pick(w);});
+texto.addEventListener("keydown",function(e){
+  var w=e.target.closest&&e.target.closest(".w");
+  if(w&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick(w);}
+});
+document.addEventListener("keydown",function(e){
+  if(e.target.tagName==="INPUT"||e.target.tagName==="SELECT"||e.altKey||e.ctrlKey||e.metaKey)return;
+  if(e.key==="ArrowLeft")go(cur-1); else if(e.key==="ArrowRight")go(cur+1);
+});
+
+/* ---------- inicio ---------- */
+var h=(location.hash.match(/fol=([0-9]+[rv])/)||[])[1], start=0;
+if(h){F.forEach(function(f,i){if(f.n===h)start=i;});}
+showFolio(start); vacia();
+})();
+</script>
+</body>
+</html>

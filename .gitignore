@@ -1,0 +1,14 @@
+# Datos pesados del DEMel: se descargan aparte (ver README)
+Mueller_Corpus_2026_data/
+Mueller_Publicacion_2026_data/
+*.zip
+
+# Bibliografía y material con derechos de autor: no se sube
+*.pdf
+
+# Archivos generados que no hace falta versionar
+web/data/cid.json
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

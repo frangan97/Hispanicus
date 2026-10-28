@@ -150,7 +150,6 @@ window.HYS_EVO = {
  "atender(se)": {"cadena": [{"forma": "attendĕre", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «atender» (español)"], "estado": "pendiente"},
  "aterrar(se)": {"cadena": [{"forma": "terrēre", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «aterrar» (español)"], "estado": "pendiente"},
  "aun": {"cadena": [{"forma": "adhuc", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «aun» (español)"], "estado": "pendiente"},
- "aura": {"cadena": [{"forma": "aura", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «aura» (español)"], "estado": "pendiente"},
  "ave 1": {"cadena": [{"forma": "avem", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «ave» (castellano antiguo)"], "estado": "pendiente"},
  "ayudar(se)": {"cadena": [{"forma": "adiutare", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «ayudar» (español)"], "estado": "pendiente"},
  "ayuso": {"cadena": [{"forma": "ad deorsum", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «ayuso» (español)"], "estado": "pendiente"},

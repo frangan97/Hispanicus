@@ -118,7 +118,7 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 
 <footer class="pie">
   <p>Texto: <em>Cantar de mío Cid</em>, copia de 1300-1400 (BNE, Vitrina 7-17), transcripción de Steven Kirby en ADMYTE 0, tomada del corpus de textos del DEMel (<a href="https://doi.org/10.18453/rosdok_id00005463">doi:10.18453/rosdok_id00005463</a>). Léxico: Diccionario del Español Medieval electrónico, Universidad de Rostock (<a href="https://doi.org/10.18453/rosdok_id00005462">doi:10.18453/rosdok_id00005462</a>). Ambos con licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a>. Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0).</p>
-  <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos.</p>
+  <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos. El DEMel reúne textos medievales: el «último registro» es la fecha más tardía que figura en su corpus, no indica que la palabra haya dejado de usarse.</p>
 </footer>
 
 <script src="data/cid.js"></script>
@@ -201,7 +201,7 @@ function lemaBloque(lid){
   function row(k,v){dl.appendChild(el("dt",null,k));dl.appendChild(el("dd",null,v));}
   if(L.fm&&L.fm.length)row("Formas",L.fm.join(", "));
   if(L.f&&L.f[0]!=null)row("Primera documentación",rango(L.f)+(L.f[2]?", en "+L.f[2]:""));
-  if(L.u!=null)row("Última fecha",L.u?"hasta "+L.u:"sin dato");
+  if(L.u!=null)row("Último registro en el DEMel",L.u?String(L.u):"sin dato");
   row("En el DEMel",L.d+" documentaciones en "+L.s+(L.s===1?" fuente":" fuentes"));
   if(!L.x)b.appendChild(dl);
   var ev=EVO[lid]||EVO[L.n], box;

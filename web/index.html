@@ -206,7 +206,7 @@ function lemaBloque(lid){
   if(!L.x)b.appendChild(dl);
   var ev=EVO[lid]||EVO[L.n], box;
   if(ev&&ev.cadena&&ev.cadena.length){
-    box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen (propuesto)"));
+    box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen posible"));
     var ol=el("ol");
     ev.cadena.forEach(function(e){var li=el("li",null,e.forma);if(e.etapa)li.appendChild(el("small",null,e.etapa));ol.appendChild(li);});
     box.appendChild(ol);

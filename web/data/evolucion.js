@@ -154,6 +154,7 @@ window.HYS_EVO = {
  "ave 1": {"cadena": [{"forma": "avem", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «ave» (castellano antiguo)"], "estado": "pendiente"},
  "ayudar(se)": {"cadena": [{"forma": "adiutare", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «ayudar» (español)"], "estado": "pendiente"},
  "ayuso": {"cadena": [{"forma": "ad deorsum", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «ayuso» (español)"], "estado": "pendiente"},
+ "azor 2": {"cadena": [{"forma": "assúr", "etapa": "árabe hispánico"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «azor» (español)"], "estado": "pendiente"},
  "año": {"cadena": [{"forma": "anno", "etapa": "latín"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «año» (español)"], "estado": "pendiente"},
  "bala": {"cadena": [{"forma": "balle", "etapa": "francés"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «bala» (español)"], "estado": "pendiente"},
  "banda": {"cadena": [{"forma": "bande", "etapa": "francés antiguo"}], "cambios": [], "fuentes": ["Wikcionario en español (es.wiktionary.org, CC BY-SA 4.0), entrada «banda» (español)"], "estado": "pendiente"},

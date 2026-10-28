@@ -1,6 +1,7 @@
 # Datos pesados del DEMel: se descargan aparte (ver README)
 Mueller_Corpus_2026_data/
 Mueller_Publicacion_2026_data/
+datos/es-extract.jsonl
 *.zip
 
 # Bibliografía y material con derechos de autor: no se sube
@@ -12,3 +13,6 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# Archivos temporales de Excel/Office
+~$*

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hyspanicus: Cantar de mio Cid</title>
+<title>Hispanicus: Cantar de mio Cid</title>
 <meta name="description" content="Lector del Cantar de mio Cid con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,6 +66,7 @@ dl.datos dt{color:var(--ink-soft);font-style:italic}
 dl.datos dd{margin:0;overflow-wrap:anywhere}
 .nota{font-size:.85rem;color:var(--ink-soft);margin:.5rem 0 0}
 .evo{margin:.8rem 0 0;padding:.6rem .8rem;border-left:3px solid var(--minio);background:rgba(163,40,29,.07);font-size:.95rem}
+.evo .aviso{font-style:italic;color:var(--minio)}
 .evo.vacio{border-left-color:var(--rule);background:none;font-style:italic;color:var(--ink-soft)}
 .evo ol{list-style:none;margin:.2rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem .5rem}
 .evo li+li::before{content:"→";margin-right:.5rem;color:var(--minio)}
@@ -99,7 +100,7 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 </head>
 <body>
 <header class="top">
-  <h1>Hyspanicus<span>Cantar de mio Cid</span></h1>
+  <h1>Hispanicus<span>Cantar de mio Cid</span></h1>
   <div class="ctl">
     <button id="ant" type="button" aria-label="Folio anterior">‹</button>
     <select id="selFolio" aria-label="Ir a un folio"></select>
@@ -206,13 +207,15 @@ function lemaBloque(lid){
   if(!L.x)b.appendChild(dl);
   var ev=EVO[lid]||EVO[L.n], box;
   if(ev&&ev.cadena&&ev.cadena.length){
-    box=el("div","evo"); box.appendChild(el("strong",null,"Evolución"));
+    box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen (propuesto)"));
     var ol=el("ol");
     ev.cadena.forEach(function(e){var li=el("li",null,e.forma);if(e.etapa)li.appendChild(el("small",null,e.etapa));ol.appendChild(li);});
     box.appendChild(ol);
     if(ev.cambios&&ev.cambios.length)box.appendChild(el("p","nota","Cambios: "+ev.cambios.join("; ")));
     if(ev.marca)box.appendChild(el("p","nota","Tipo: "+ev.marca));
     if(ev.fuentes&&ev.fuentes.length)box.appendChild(el("p","nota","Fuentes: "+ev.fuentes.join("; ")));
+    if(ev.nota)box.appendChild(el("p","nota",ev.nota));
+    if(ev.estado!=="verificado")box.appendChild(el("p","nota aviso","Étimo propuesto por el Wikcionario, todavía sin verificar en la bibliografía."));
   }else{
     box=el("div","evo vacio","La evolución de esta palabra todavía no está en la tabla curada.");
   }

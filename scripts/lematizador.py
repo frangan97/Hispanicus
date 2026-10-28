@@ -167,13 +167,13 @@ def _abrir(path):
     return t
 
 def cargar_manual(path):
-    """CSV con columnas forma, lema, estado (ok | propuesta | descartar). Acepta , o ; y UTF-8 o cp1252.
+    """CSV con columnas forma, lema, estado (ok | propuesta | descartar). Acepta , ; o tabulador, y UTF-8 o cp1252.
     Devuelve {clave(forma): (lema, estado)}."""
     out = {}
     if not os.path.exists(path): return out
     texto = _abrir(path)
     cab = texto.split("\n", 1)[0]
-    delim = ";" if cab.count(";") > cab.count(",") else ","
+    delim = max([";", ",", "\t"], key=cab.count)      # Excel puede guardar con ; , o tabulador
     for r in csv.DictReader(texto.splitlines(), delimiter=delim):
         f = clave((r.get("forma") or "").strip()); l = (r.get("lema") or "").strip()
         est = (r.get("estado") or "propuesta").strip().lower()

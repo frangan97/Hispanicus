@@ -1,4 +1,4 @@
-"""Extrae del zip del DEMel (sin descomprimirlo) lo necesario para Hyspanicus.
+"""Extrae del zip del DEMel (sin descomprimirlo) lo necesario para Hispanicus.
 
 Uso: python3 extract_demel.py <zip> <carpeta_salida>
 Salida:

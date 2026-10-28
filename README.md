@@ -1,4 +1,4 @@
-# Hyspanicus
+# Hispanicus
 
 Lector del *Cantar de mio Cid* con el léxico del Diccionario del Español Medieval electrónico (DEMel).
 Tocá una palabra: la glosa muestra su lema, sus formas documentadas y desde cuándo se registra.
@@ -19,11 +19,15 @@ En tu computadora: abrí `web/index.html` en el navegador (no necesita servidor 
   - Columnas: forma; lema; estado (`propuesta`, `ok` o `descartar`); el resto es informativo.
   - Orden de prioridad: anotación del DEMel > tabla de la obra > tabla común > reglas automáticas.
   - `scripts/proponer_manuales.py` agrega formas nuevas sin tocar las filas existentes.
-- `web/data/evolucion.js`: tabla curada de evolución (vacía por ahora; el formato está en el archivo). Cada dato debe verificarse en la bibliografía.
+- `web/data/evolucion.js`: tabla de evolución que lee la página. Se genera con `scripts/build_evolucion.py` (no editar a mano).
+  - `datos/evolucion_wiktionary.csv`: étimos propuestos por el Wikcionario en español para los lemas del DEMel (todos `pendiente`; las columnas que la fuente no da quedan vacías).
+  - `datos/verificacion_cid.xlsx`: hoja de revisión de los lemas del Cid. Un étimo pasa a `verificado` solo con Estado = verificado y una Fuente verificada (obra y página, o entrada del DLE). La página marca como «propuesto, sin verificar» todo lo demás.
+  - Después de corregir `datos/manual/cid.csv` o la hoja: `python3 scripts/build_cid.py` y `python3 scripts/build_evolucion.py`.
 
 ## Datos y licencias
 - Texto: DEMel, corpus de textos t0103 (ADMYTE 0, transcripción de Steven Kirby), doi:10.18453/rosdok_id00005463, CC BY-SA 4.0.
 - Léxico: DEMel, publicación de datos, doi:10.18453/rosdok_id00005462, CC BY-SA 4.0.
+- Étimos propuestos: Wikcionario en español (es.wiktionary.org), CC BY-SA 4.0, extraídos con wiktextract (kaikki.org, `es-extract.jsonl`, que no se sube al repositorio por su tamaño). Son propuestas colaborativas, no una fuente bibliográfica.
 - Los datos derivados de este repositorio se comparten bajo CC BY-SA 4.0.
 
 ## Regenerar los datos

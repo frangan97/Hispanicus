@@ -5,7 +5,7 @@ Entradas:
   datos/verificacion_cid.xlsx     (opcional) tu revisión manual: Estado, Fuente verificada y étimo corregido
 
 Reglas:
-  - Solo se incluyen los lemas que figuran en web/data/cid.json.
+  - Solo se incluyen los lemas que figuran en alguna obra (web/data/<obra>.json).
   - Un lema queda «verificado» únicamente si en la hoja tiene Estado = verificado Y una Fuente verificada.
     Sin fuente se trata como pendiente (la IA no inventa etimologías; si una fuente no lo dice, la celda queda vacía).
   - Si corregís el étimo en la hoja, deja de valer la fuente del Wikcionario: se usa tu Fuente verificada.
@@ -19,7 +19,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 CSV_WIKT = RAIZ / "datos" / "evolucion_wiktionary.csv"
 XLSX = RAIZ / "datos" / "verificacion_cid.xlsx"
-CID = RAIZ / "web" / "data" / "cid.json"
+OBRAS_JSON = sorted((RAIZ / "web" / "data").glob("*.json"))
 SALIDA = RAIZ / "web" / "data" / "evolucion.js"
 
 CABECERA = """/* Tabla de evolución. Una entrada por lema (nombre del lema como en el DEMel, p. ej. "noche").
@@ -55,8 +55,9 @@ def fuentes_wikt(texto):
     return out
 
 def main():
-    cid = json.load(open(CID, encoding="utf-8"))
-    lemas_cid = {v["n"] for v in cid["lemmas"].values()}
+    lemas_cid = set()
+    for f in OBRAS_JSON:
+        lemas_cid |= {v["n"] for v in json.load(open(f, encoding="utf-8"))["lemmas"].values()}
     base = {}
     for r in csv.DictReader(open(CSV_WIKT, encoding="utf-8-sig"), delimiter=";"):
         if r["etimo"].strip():
@@ -106,7 +107,7 @@ def main():
     cuerpo = ",\n".join(" %s: %s" % (json.dumps(k, ensure_ascii=False), json.dumps(v, ensure_ascii=False)) for k, v in sorted(evo.items()))
     SALIDA.write_text(CABECERA + "window.HYS_EVO = {\n" + cuerpo + "\n};\n", encoding="utf-8", newline="\n")
     ver = sum(1 for v in evo.values() if v["estado"] == "verificado")
-    print("evolucion.js: %d lemas con étimo (%d verificados, %d pendientes) de %d lemas del Cid" % (len(evo), ver, len(evo) - ver, len(lemas_cid)))
+    print("evolucion.js: %d lemas con étimo (%d verificados, %d pendientes) de %d lemas de las obras" % (len(evo), ver, len(evo) - ver, len(lemas_cid)))
     for a in avisos:
         print("AVISO:", a, file=sys.stderr)
 

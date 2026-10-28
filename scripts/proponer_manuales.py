@@ -1,24 +1,26 @@
-"""Genera las tablas manuales de lemas (datos/manual/comunes.csv y cid.csv) con propuestas.
+"""Genera las tablas manuales de lemas (datos/manual/comunes.csv y <obra>.csv) con propuestas.
 
  - comunes.csv: formas ambiguas (de, al, se, es...). Valen para TODAS las obras.
- - cid.csv: formas sin lema (nombres propios, formas raras) de esta obra.
+ - <obra>.csv: formas sin lema (nombres propios, formas raras) de esa obra (cid.csv, oria.csv...).
+   Con una obra distinta del Cid solo se genera su tabla: comunes.csv no se toca.
 Las filas ya existentes no se tocan (se conservan tus correcciones); solo se agregan formas nuevas.
 Columnas: forma; lema; estado; tipo; apariciones; ejemplo; candidatos
   estado: propuesta (sin revisar) | ok (revisada) | descartar (no aplicar)
   lema:   nombre del lema como figura en el DEMel (p. ej. "en 1"); varios separados por |.
           Si no existe en el DEMel se crea como lema propio, marcado "sin datos del DEMel".
-Uso: python3 proponer_manuales.py
+Uso: python3 proponer_manuales.py [obra]      (cid por defecto; también oria)
 """
 import csv, json, os, re, subprocess, sys, tempfile, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import lematizador as LZ
 
-H = os.path.expanduser("~/mnt/Hispanicus")
+H = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OBRA = ([a for a in sys.argv[1:] if not a.startswith("-")] or ["cid"])[0]
 LET = "a-záéíóúñçüſ"
 COLS = ["forma", "lema", "estado", "tipo", "apariciones", "ejemplo", "candidatos"]
 # Siempre se parte de una construcción SIN tablas manuales, para ver qué falta de verdad.
-_tmp = os.path.join(tempfile.gettempdir(), "hys_cid_auto.json")
-subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "build_cid.py")],
+_tmp = os.path.join(tempfile.gettempdir(), f"hys_{OBRA}_auto.json")
+subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "build_obra.py"), OBRA],
                check=True, env=dict(os.environ, HYS_OUT=_tmp), stdout=subprocess.DEVNULL)
 d = json.load(open(_tmp, encoding="utf-8")); lem = d["lemmas"]
 core = lambda w: "".join(re.findall(f"[{LET}]", w.lower()))
@@ -31,7 +33,7 @@ def escribir(path, rows):
     with open(path, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, COLS, delimiter=";", extrasaction="ignore"); w.writeheader(); w.writerows(rows)
 
-P_COM, P_OBRA = f"{H}/datos/manual/comunes.csv", f"{H}/datos/manual/cid.csv"
+P_COM, P_OBRA = f"{H}/datos/manual/comunes.csv", f"{H}/datos/manual/{OBRA}.csv"
 com, obra = ([], []) if "--regenerar" in sys.argv else (leer(P_COM), leer(P_OBRA))
 hechas = {LZ.clave(r["forma"]) for r in com + obra}
 
@@ -58,14 +60,14 @@ def preferido(forma, ids):
         if LZ.clave(forma) in {LZ.clave(n) for n in LZ.nombres(lem[i]["n"])}: return i
     return ids[0]
 
-# Semilla: formas muy frecuentes del Cantar cuyo lema no es dudoso (nombres de personajes y lugares,
+# Semilla (solo para el Cid): formas muy frecuentes del Cantar cuyo lema no es dudoso (nombres de personajes y lugares,
 # una forma de «oír» y la abreviatura de «cristianos»). Quedan como "propuesta" hasta que las revises.
 SEMILLA = {"minaya": "Minaya", "mynaya": "Minaya", "alfonsso": "Alfonso", "albarfanez": "Albarfáñez", "martin": "Martín",
            "diaz": "Díaz", "ruy": "Ruy", "antolinez": "Antolínez", "vermuez": "Bermúdez", "eluira": "Elvira", "gustioz": "Gustioz",
            "rachel": "Raquel", "ximena": "Jimena", "alcocer": "Alcocer", "munoz": "Muñoz", "xpistianos": "cristiano", "oyd": "oír"}
-SEMILLA = {LZ.clave(k): v for k, v in SEMILLA.items()}
+SEMILLA = {LZ.clave(k): v for k, v in SEMILLA.items()} if OBRA == "cid" else {}
 nuevas_com = nuevas_obra = nombres = 0
-for k, a in sorted(amb.items(), key=lambda kv: -kv[1]["n"]):
+for k, a in (sorted(amb.items(), key=lambda kv: -kv[1]["n"]) if OBRA == "cid" else []):
     if k in hechas or a["n"] < 4: continue
     ids = [i for i in a["l"] if i in lem]
     if not ids: continue
@@ -82,4 +84,4 @@ for k, s in sorted(sin.items(), key=lambda kv: -kv[1]["n"])[:420]:
                  "apariciones": s["n"], "ejemplo": s["ej"][:110], "candidatos": ""}); nuevas_obra += 1
 os.makedirs(os.path.dirname(P_COM), exist_ok=True)
 escribir(P_COM, com); escribir(P_OBRA, obra)
-print(f"comunes.csv: {len(com)} filas ({nuevas_com} nuevas) | cid.csv: {len(obra)} filas ({nuevas_obra} nuevas; {nombres} nombres propios propuestos, {nuevas_obra-nombres} para completar)")
+print(f"comunes.csv: {len(com)} filas ({nuevas_com} nuevas) | {OBRA}.csv: {len(obra)} filas ({nuevas_obra} nuevas; {nombres} nombres propios propuestos, {nuevas_obra-nombres} para completar)")

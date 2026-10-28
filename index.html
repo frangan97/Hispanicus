@@ -1,6 +1,206 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=web/">
-<title>Hispanicus</title>
-<link rel="canonical" href="web/">
-</head><body><p><a href="web/">Entrar a Hispanicus</a></p></body></html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hispanicus: elegí un manuscrito</title>
+<meta name="description" content="Lector de textos del español medieval con el léxico del Diccionario del Español Medieval electrónico: elegí un manuscrito, tocá una palabra y mirá su lema, sus formas y su origen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#26201a; --desk-ink:#eadfc4; --desk-soft:#a89878;
+  --vell:#e6dabb; --rule:#c4b48a;
+  --minio:#a3281d; --lapis:#28478a; --oro:#d9b24c;
+}
+*{box-sizing:border-box}
+html{background:#1c1611}
+body{margin:0;min-height:100vh;color:var(--desk-ink);
+  background:radial-gradient(ellipse 80% 55% at 50% 0%,#4d3a24 0%,#2c231a 48%,#1c1611 100%) fixed;
+  font:19px/1.65 Cardo,"Palatino Linotype","Book Antiqua",Cambria,"Segoe UI Historic","Segoe UI Symbol",serif;-webkit-text-size-adjust:100%}
+a{color:inherit}
+
+/* portada */
+.portada{text-align:center;padding:3.2rem 1.25rem 1.2rem}
+.sobre{margin:0;font-size:.85rem;letter-spacing:.28em;text-transform:uppercase;color:var(--desk-soft)}
+.portada h1{margin:.3rem 0 .2rem;font-size:clamp(2.8rem,8vw,4.6rem);line-height:1.05;font-weight:400;font-style:italic;letter-spacing:.01em;
+  color:#f3e7c8;text-shadow:0 2px 0 #0006,0 0 28px #d9b24c33}
+.bajada{margin:.4rem auto 0;max-width:34rem;font-size:1.08rem;color:var(--desk-ink);opacity:.92}
+.filete{margin:1.2rem auto 0;color:var(--oro);font-size:1.4rem;line-height:1}
+.filete::before,.filete::after{content:"";display:inline-block;vertical-align:middle;width:min(9rem,22vw);height:1px;margin:0 .9rem;background:linear-gradient(90deg,#0000,var(--oro),#0000)}
+
+/* estante */
+.estante{list-style:none;margin:2.2rem auto 0;padding:0 1.25rem;max-width:60rem;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,20.5rem));gap:3rem 3.2rem;justify-content:center}
+.codice{display:block;text-decoration:none;color:inherit;border-radius:8px;outline-offset:8px}
+.codice:focus-visible{outline:2px solid #e9b84a}
+.tapa{position:relative;aspect-ratio:4/5;border-radius:3px 10px 10px 3px;padding:1.05rem 1.05rem 1.05rem 1.9rem;
+  background:linear-gradient(135deg,#76241b 0%,#531810 55%,#3c100b 100%);
+  box-shadow:inset 0 0 0 2px #0007,inset 0 0 0 7px #7e2d22,inset 0 0 0 8px #d9b24c99,0 26px 38px -16px #000d,0 2px 0 #0008;
+  transition:transform .28s ease,box-shadow .28s ease;transform-origin:left center}
+.tapa::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1.3rem;border-radius:3px 0 0 3px;
+  background:linear-gradient(90deg,#1f0907,#4a130d 55%,#5e1a12);box-shadow:inset -2px 0 0 #0005}
+.tapa::after{content:"";position:absolute;left:.62rem;top:1rem;bottom:1rem;width:2px;
+  background:repeating-linear-gradient(180deg,#d9b24c88 0 6px,#0000 6px 14px)}
+.codice:hover .tapa,.codice:focus-visible .tapa{transform:translateY(-8px) rotateY(-9deg);
+  box-shadow:inset 0 0 0 2px #0007,inset 0 0 0 7px #7e2d22,inset 0 0 0 8px #d9b24c,0 36px 46px -16px #000,0 0 38px -6px #d9b24c55}
+.mini{width:100%;height:100%;display:block}
+.mini svg,.mini img{width:100%;height:100%;display:block;object-fit:cover}
+
+.rotulo{padding:1.1rem .3rem 0;text-align:center}
+.rotulo .genero{margin:0;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--desk-soft)}
+.rotulo h2{margin:.15rem 0 0;font-size:1.65rem;line-height:1.2;font-weight:400;font-style:italic;color:#f3e7c8}
+.rotulo .autor{margin:.1rem 0 0;font-size:.98rem;color:var(--desk-soft)}
+.rotulo .desc{margin:.7rem 0 0;font-size:1rem;line-height:1.5;color:var(--desk-ink);opacity:.9}
+.rotulo .cifras{margin:.7rem 0 0;font-size:.88rem;font-style:italic;color:var(--desk-soft)}
+.rotulo .abrir{display:inline-block;margin-top:.9rem;padding:.4rem 1.1rem;border:1px solid #8a7648;border-radius:3px;font-size:1rem;letter-spacing:.02em;transition:background .2s,border-color .2s,color .2s}
+.codice:hover .abrir,.codice:focus-visible .abrir{background:var(--oro);border-color:var(--oro);color:#2b2119}
+
+.pie{max-width:46rem;margin:4rem auto 0;padding:0 1.25rem 3rem;text-align:center;font-size:.88rem;line-height:1.55;color:var(--desk-soft)}
+.pie p{margin:.4rem 0}
+noscript p{text-align:center;color:var(--desk-soft)}
+
+@media (max-width:560px){
+  body{font-size:18px}
+  .portada{padding-top:2.2rem}
+  .estante{gap:2.6rem}
+  .tapa{max-width:20.5rem;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){.tapa,.abrir{transition:none}.codice:hover .tapa,.codice:focus-visible .tapa{transform:none}}
+</style>
+</head>
+<body>
+<header class="portada">
+  <p class="sobre">Léxico y evolución del español medieval</p>
+  <h1>Hispanicus</h1>
+  <p class="bajada">Elegí un manuscrito. Tocá una palabra del texto y mirá su lema, sus formas, desde cuándo se documenta y de dónde puede venir.</p>
+  <div class="filete" aria-hidden="true">❦</div>
+</header>
+
+<main>
+  <ul class="estante" id="estante" aria-label="Manuscritos disponibles"></ul>
+  <noscript><p>Para ver los manuscritos hace falta activar JavaScript.</p></noscript>
+</main>
+
+<footer class="pie">
+  <p>Textos y léxico: Diccionario del Español Medieval electrónico (DEMel), Universidad de Rostock, licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a> (<a href="https://doi.org/10.18453/rosdok_id00005463">textos</a>, <a href="https://doi.org/10.18453/rosdok_id00005462">léxico</a>). Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0). Las ilustraciones de las tapas son dibujos originales de este proyecto.</p>
+</footer>
+
+<script src="web/data/obras.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- ilustraciones (dibujos originales; cada una va dentro de un arco románico) ---------- */
+var ARCO="M12 292V118A108 108 0 0 1 228 118V292Z";
+function marco(id,fondo,escena,etiqueta){
+  return '<svg viewBox="0 0 240 300" role="img" aria-label="'+etiqueta+'" xmlns="http://www.w3.org/2000/svg">'+
+    '<defs><clipPath id="'+id+'"><path d="'+ARCO+'"/></clipPath>'+fondo+'</defs>'+
+    '<g clip-path="url(#'+id+')">'+escena+'</g>'+
+    '<path d="'+ARCO+'" fill="none" stroke="#d9b24c" stroke-width="3.2"/>'+
+    '<path d="M18 288V118A102 102 0 0 1 222 118V288Z" fill="none" stroke="#7e2d22" stroke-width="1.4"/></svg>';
+}
+
+function cidSVG(){
+  var fondo='<linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f2f63"/><stop offset=".55" stop-color="#8d3d3a"/><stop offset="1" stop-color="#dc8a3c"/></linearGradient>'+
+    '<radialGradient id="cg"><stop offset="0" stop-color="#ffe9a3" stop-opacity=".95"/><stop offset="1" stop-color="#ffe9a3" stop-opacity="0"/></radialGradient>';
+  var e='<rect width="240" height="300" fill="url(#cs)"/>'+
+    '<circle cx="118" cy="206" r="66" fill="url(#cg)"/><circle cx="118" cy="206" r="25" fill="#f4d170"/>'+
+    '<path d="M0 236C40 216 72 223 106 233C142 243 182 214 240 229V300H0Z" fill="#3b2a2e"/>'+
+    '<path d="M0 263C50 247 100 263 150 253C190 245 216 253 240 249V300H0Z" fill="#241a1d"/>'+
+    /* castillo */
+    '<g fill="#1f1618"><rect x="20" y="186" width="48" height="74"/>'+
+      '<rect x="20" y="178" width="9" height="9"/><rect x="33" y="178" width="9" height="9"/><rect x="46" y="178" width="9" height="9"/><rect x="59" y="178" width="9" height="9"/>'+
+      '<rect x="70" y="212" width="36" height="48"/>'+
+      '<rect x="70" y="204" width="9" height="9"/><rect x="83" y="204" width="9" height="9"/><rect x="96" y="204" width="10" height="9"/></g>'+
+    '<g fill="#f4d170"><rect x="41" y="202" width="5" height="14" rx="2.5"/><rect x="83" y="226" width="5" height="12" rx="2.5"/></g>'+
+    '<path d="M36 260V246A8 8 0 0 1 52 246V260Z" fill="#0d0809"/>'+
+    /* espada */
+    '<g transform="translate(152 0)">'+
+      '<polygon points="0,50 8,66 8,207 -8,207 -8,66" fill="#ebe7d8"/><rect x="-1.2" y="66" width="2.4" height="138" fill="#b8b3a0"/>'+
+      '<rect x="-31" y="206" width="62" height="10" rx="5" fill="#d9b24c"/><circle cx="-31" cy="211" r="5.5" fill="#d9b24c"/><circle cx="31" cy="211" r="5.5" fill="#d9b24c"/>'+
+      '<rect x="-4.5" y="216" width="9" height="36" fill="#7e2d22"/><rect x="-4.5" y="224" width="9" height="2" fill="#d9b24c"/><rect x="-4.5" y="236" width="9" height="2" fill="#d9b24c"/>'+
+      '<circle cx="0" cy="258" r="8.5" fill="#d9b24c"/></g>'+
+    /* lanza y pendón */
+    '<line x1="206" y1="96" x2="206" y2="264" stroke="#3a2a1a" stroke-width="3"/>'+
+    '<polygon points="206,86 201.5,99 210.5,99" fill="#ebe7d8"/>'+
+    '<path d="M206 102L238 111L228 121L238 131L206 140Z" fill="#a3281d"/><circle cx="216" cy="121" r="3.4" fill="#d9b24c"/>';
+  return marco("cc",fondo,e,"Ilustración original: un castillo, una espada y un pendón al atardecer");
+}
+
+function oriaSVG(){
+  var fondo='<linearGradient id="os" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1737"/><stop offset="1" stop-color="#2d4c93"/></linearGradient>'+
+    '<radialGradient id="og"><stop offset="0" stop-color="#ffe9a3" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd978" stop-opacity=".35"/><stop offset="1" stop-color="#ffd978" stop-opacity="0"/></radialGradient>';
+  var estrellas=[[40,70,1.6],[62,38,1.2],[86,26,1.4],[152,22,1.2],[176,38,1.5],[198,78,1.2],[46,120,1.2],[188,124,1.4],[100,52,1],[140,58,1],[212,152,1.2],[30,164,1.2],[170,96,1],[70,92,1]];
+  var s=estrellas.map(function(a){return '<circle cx="'+a[0]+'" cy="'+a[1]+'" r="'+a[2]+'" fill="#fff3c4"/>';}).join("");
+  var peldaños="";
+  for(var i=0;i<12;i++){
+    var y=250-i*12.4, t=(256-y)/(256-104);
+    peldaños+='<line x1="'+(112+2*t).toFixed(1)+'" y1="'+y.toFixed(1)+'" x2="'+(128-2*t).toFixed(1)+'" y2="'+y.toFixed(1)+'"/>';
+  }
+  function virgen(x,tunica){
+    return '<circle cx="'+x+'" cy="82" r="10" fill="#ffe9a3" opacity=".9"/><circle cx="'+x+'" cy="82" r="10" fill="none" stroke="#d9b24c" stroke-width="1.4"/>'+
+      '<circle cx="'+x+'" cy="82" r="5.4" fill="#f1d9b5"/>'+
+      '<path d="M'+(x-10)+' 112L'+(x-5.5)+' 90H'+(x+5.5)+'L'+(x+10)+' 112Z" fill="'+tunica+'"/>';
+  }
+  var e='<rect width="240" height="300" fill="url(#os)"/>'+s+
+    '<circle cx="192" cy="68" r="11" fill="#f4ecd0"/><circle cx="197" cy="64" r="10" fill="#1a2a5e"/>'+
+    '<circle cx="120" cy="92" r="74" fill="url(#og)"/>'+
+    '<ellipse cx="120" cy="114" rx="62" ry="7" fill="#fff3c4" opacity=".22"/>'+
+    virgen(86,"#a3281d")+virgen(120,"#e8e0cc")+virgen(154,"#4a6cc0")+
+    '<g stroke="#e6c25a" stroke-width="2.2" stroke-linecap="round"><line x1="112" y1="256" x2="114" y2="104"/><line x1="128" y1="256" x2="126" y2="104"/></g>'+
+    '<g stroke="#e6c25a" stroke-width="1.8" stroke-linecap="round">'+peldaños+'</g>'+
+    '<path d="M0 262C48 248 96 262 150 254C196 247 220 254 240 252V300H0Z" fill="#141018"/>'+
+    '<polygon points="76,244 120,214 164,244" fill="#2b2220"/><rect x="84" y="242" width="72" height="44" fill="#3d312c"/>'+
+    '<path d="M109 286V262A11 11 0 0 1 131 262V286Z" fill="#ffd978"/><path d="M112 286V264A8 8 0 0 1 128 264V286Z" fill="#fff0b8"/>';
+  return marco("co",fondo,e,"Ilustración original: una celda con una escalera de luz que sube a un cielo estrellado");
+}
+
+function genericoSVG(titulo){
+  var ini=(titulo||"?").replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/,"").charAt(0).toUpperCase()||"?";
+  var fondo='<linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eadfc0"/><stop offset="1" stop-color="#d4c394"/></linearGradient>';
+  var e='<rect width="240" height="300" fill="url(#gs)"/>'+
+    '<g stroke="#7e2d22" stroke-width="1" opacity=".35">'+[150,170,190,210,230,250].map(function(y){return '<line x1="40" y1="'+y+'" x2="200" y2="'+y+'"/>';}).join("")+'</g>'+
+    '<rect x="62" y="60" width="86" height="86" fill="#a3281d"/><rect x="66" y="64" width="78" height="78" fill="none" stroke="#d9b24c" stroke-width="2"/>'+
+    '<text x="105" y="125" text-anchor="middle" font-family="Cardo,Georgia,serif" font-size="68" font-weight="700" fill="#f6e7b8">'+ini+'</text>';
+  return marco("cg2",fondo,e,"Ilustración: folio con una inicial decorada");
+}
+
+/* ---------- presentación de cada obra (para sumar un manuscrito: agregar una entrada) ---------- */
+/* foto: ruta a una imagen propia (p. ej. "web/img/cid.jpg"); si se indica, reemplaza al dibujo */
+var P={
+  cid:{genero:"Cantar de gesta",
+       desc:"El destierro, las conquistas y la honra de Rodrigo Díaz, el Cid. Copia de 1300-1400 conservada en la Biblioteca Nacional de España.",
+       svg:cidSVG, foto:null},
+  oria:{genero:"Poema en cuaderna vía",
+        desc:"La vida de la reclusa Oria y sus visiones, contada por Gonzalo de Berceo.",
+        svg:oriaSVG, foto:null}
+};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function n(x){return Number(x).toLocaleString("es-AR");}
+
+var lista=document.getElementById("estante");
+(window.HYS_OBRAS||[]).forEach(function(o){
+  var p=P[o.id]||{}, li=document.createElement("li");
+  var arte=p.foto?'<img src="'+esc(p.foto)+'" alt="Imagen de '+esc(o.titulo)+'">':(p.svg||function(){return genericoSVG(o.titulo);})();
+  li.innerHTML=
+    '<a class="codice" href="web/?obra='+encodeURIComponent(o.id)+'" aria-label="Abrir '+esc(o.titulo)+'">'+
+      '<div class="tapa"><div class="mini">'+arte+'</div></div>'+
+      '<div class="rotulo">'+
+        '<p class="genero">'+esc(p.genero||"Manuscrito")+'</p>'+
+        '<h2>'+esc(o.titulo)+'</h2>'+
+        '<p class="autor">'+esc(o.autor)+(o.periodo?' · '+esc(o.periodo):'')+'</p>'+
+        (p.desc?'<p class="desc">'+esc(p.desc)+'</p>':'')+
+        '<p class="cifras">'+n(o.versos)+' versos · '+n(o.folios)+' folios · '+n(o.palabras)+' palabras</p>'+
+        '<span class="abrir">Abrir el manuscrito ›</span>'+
+      '</div>'+
+    '</a>';
+  lista.appendChild(li);
+});
+if(!lista.children.length){lista.innerHTML='<li><p style="text-align:center;color:#a89878">No hay manuscritos cargados.</p></li>';}
+})();
+</script>
+</body>
+</html>

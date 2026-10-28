@@ -8,7 +8,7 @@ datos/es-extract.jsonl
 *.pdf
 
 # Archivos generados que no hace falta versionar
-web/data/cid.json
+web/data/*.json
 __pycache__/
 *.pyc
 .DS_Store

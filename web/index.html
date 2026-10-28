@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hispanicus: Cantar de mio Cid</title>
-<meta name="description" content="Lector del Cantar de mio Cid con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.">
+<title>Hispanicus</title>
+<meta id="metaDesc" name="description" content="Lector de textos medievales con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -25,6 +25,10 @@ button,select,input{font:inherit;color:inherit}
 .top{max-width:72rem;margin:0 auto;padding:1.2rem 1.25rem .9rem;display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;justify-content:space-between}
 .top h1{margin:0;font-size:1.5rem;font-weight:400;font-style:italic;letter-spacing:.01em}
 .top h1 span{font-style:normal;font-size:.9rem;color:var(--desk-soft);margin-left:.6rem}
+.top h1 a{text-decoration:none}
+.top h1 a:hover{text-decoration:underline;text-underline-offset:.2em}
+.top .volver{border:1px solid #6f6044;border-radius:3px;padding:.3rem .65rem;font-size:.95rem;text-decoration:none;white-space:nowrap}
+.top .volver:hover{background:#3a3026}
 .ctl{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
 .top button,.top select,.top input{background:transparent;border:1px solid #6f6044;border-radius:3px;padding:.3rem .65rem;font-size:.95rem}
 .top button{cursor:pointer;min-width:2.2rem}
@@ -99,8 +103,9 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 </head>
 <body>
 <header class="top">
-  <h1>Hispanicus<span>Cantar de mio Cid</span></h1>
+  <h1><a href="../">Hispanicus</a><span id="obraTit"></span></h1>
   <div class="ctl">
+    <a class="volver" href="../" title="Elegir otro manuscrito">‹ Manuscritos</a>
     <button id="ant" type="button" aria-label="Folio anterior">‹</button>
     <select id="selFolio" aria-label="Ir a un folio"></select>
     <button id="sig" type="button" aria-label="Folio siguiente">›</button>
@@ -109,7 +114,7 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 </header>
 
 <main class="hoja">
-  <section class="texto" id="texto" aria-label="Texto del Cantar"></section>
+  <section class="texto" id="texto" aria-label="Texto"></section>
   <aside class="glosa" id="glosa" aria-live="polite" aria-label="Glosa de la palabra elegida">
     <button class="glosa-cerrar" id="cerrar" type="button" aria-label="Cerrar la glosa">×</button>
     <div class="glosa-in" id="glosaIn"></div>
@@ -117,17 +122,34 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 </main>
 
 <footer class="pie">
-  <p>Texto: <em>Cantar de mío Cid</em>, copia de 1300-1400 (BNE, Vitrina 7-17), transcripción de Steven Kirby en ADMYTE 0, tomada del corpus de textos del DEMel (<a href="https://doi.org/10.18453/rosdok_id00005463">doi:10.18453/rosdok_id00005463</a>). Léxico: Diccionario del Español Medieval electrónico, Universidad de Rostock (<a href="https://doi.org/10.18453/rosdok_id00005462">doi:10.18453/rosdok_id00005462</a>). Ambos con licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a>. Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0).</p>
+  <p id="fuenteObra"></p>
+  <p>Léxico: Diccionario del Español Medieval electrónico, Universidad de Rostock (<a href="https://doi.org/10.18453/rosdok_id00005462">doi:10.18453/rosdok_id00005462</a>). Texto y léxico con licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a>. Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0).</p>
   <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos. El DEMel reúne textos medievales: el «último registro» es la fecha más tardía que figura en su corpus, no indica que la palabra haya dejado de usarse.</p>
 </footer>
 
-<script src="data/cid.js"></script>
 <script src="data/evolucion.js"></script>
 <script>
 (function(){
 "use strict";
-var D=window.HYS_CID, EVO=window.HYS_EVO||{};
-var F=D.folios, LM=D.lemmas;
+var OBRA=((location.search.match(/[?&]obra=([a-z0-9_-]+)/i)||[])[1]||"cid").toLowerCase();
+function fallo(){
+  document.title="Hispanicus";
+  document.getElementById("texto").innerHTML='<p class="estado">No se encontró ese manuscrito. <a href="../">Volver a la biblioteca</a>.</p>';
+}
+var sc=document.createElement("script");
+sc.src="data/"+encodeURIComponent(OBRA)+".js";
+sc.onload=function(){var d=window.HYS_DATA&&window.HYS_DATA[OBRA];if(d)iniciar(d);else fallo();};
+sc.onerror=fallo;
+document.head.appendChild(sc);
+
+function iniciar(D){
+var EVO=window.HYS_EVO||{};
+var F=D.folios, LM=D.lemmas, M=D.meta||{};
+document.title="Hispanicus: "+M.obra;
+document.getElementById("obraTit").textContent=M.obra;
+document.getElementById("fuenteObra").innerHTML=M.fuente_html||"";
+document.getElementById("metaDesc").setAttribute("content","Lector de "+M.obra+" con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.");
+var hayV=F.some(function(f){return f.lines.some(function(l){return l.some(function(t){return t.v;});});});
 var LET="a-záéíóúñçüſ";
 var reParts=new RegExp("^([^"+LET+"]*)(.*?)([^"+LET+"]*)$","i");
 var reLet=new RegExp("["+LET+"]","i");
@@ -189,7 +211,7 @@ function vacia(){
   gin.textContent="";
   var d=el("div","vacia");
   d.appendChild(el("p","estado","Tocá una palabra del texto para ver su lema, sus formas documentadas y desde cuándo se registra."));
-  d.appendChild(el("p","nota","Las palabras subrayadas en azul están anotadas por el DEMel en este pasaje, así que su lema es seguro. En las demás, la glosa propone los lemas posibles según la grafía."));
+  d.appendChild(el("p","nota",hayV?"Las palabras subrayadas en azul están anotadas por el DEMel en este pasaje, así que su lema es seguro. En las demás, la glosa propone los lemas posibles según la grafía.":"El DEMel no anota palabras de este texto: la glosa propone los lemas según la grafía y la frecuencia, y puede equivocarse."));
   gin.appendChild(d);
 }
 function lemaBloque(lid){
@@ -206,7 +228,7 @@ function lemaBloque(lid){
   if(!L.x)b.appendChild(dl);
   var ev=EVO[lid]||EVO[L.n], box;
   if(ev&&ev.cadena&&ev.cadena.length){
-    box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen posible"));
+    box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen etimológico posible"));
     var ol=el("ol");
     ev.cadena.forEach(function(e){var li=el("li",null,e.forma);if(e.etapa)li.appendChild(el("small",null,e.etapa));ol.appendChild(li);});
     box.appendChild(ol);
@@ -319,6 +341,7 @@ document.addEventListener("keydown",function(e){
 var h=(location.hash.match(/fol=([0-9]+[rv])/)||[])[1], start=0;
 if(h){F.forEach(function(f,i){if(f.n===h)start=i;});}
 showFolio(start); vacia();
+}
 })();
 </script>
 </body>

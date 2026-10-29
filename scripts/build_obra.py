@@ -22,7 +22,7 @@ A_DOI_TXT = '<a href="https://doi.org/10.18453/rosdok_id00005463">doi:10.18453/r
 OBRAS = {
     "cid": {
         "tei": "t0103", "docs": "cid_documentaciones.csv", "recorte": None,
-        "meta": {"obra": "Cantar de mío Cid", "autor": "Anónimo", "sigla": "Cid(ADMYTE 0)", "datacion": "c 1140?",
+        "meta": {"obra": "Cantar de mío Cid", "codice": "BNE, Vitr. 7-17", "autor": "Anónimo", "sigla": "Cid(ADMYTE 0)", "datacion": "c 1140?",
                  "periodo": "Original hacia 1140 · copia de 1300-1400",
                  "edicion": "Anónimo, Cantar de mío Cid. Madrid: Nacional, Vitrina 7-17, copiado 1300-1400. Transcr. Steven Kirby. In: ADMYTE 0.",
                  "texto": "DEMel, corpus de textos t0103 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
@@ -33,7 +33,7 @@ OBRAS = {
         "tei": "t0120", "docs": "santa_oria_documentaciones.csv",
         # el TEI de Berceo es un solo bloque: la Vida de Santa Oria va desde el folio 48v hasta su Amén final
         "recorte": ("48v", "nunca ueamos mal Amen"),
-        "meta": {"obra": "Vida de Santa Oria", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
+        "meta": {"obra": "Vida de Santa Oria", "codice": "RAE, Ms. 4 (códice F)", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
                  "periodo": "Siglo XIII",
                  "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
                  "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
@@ -42,7 +42,7 @@ OBRAS = {
     },
     "reyes": {
         "tei": "t0006", "docs": "t0006_documentaciones.csv", "recorte": None,
-        "meta": {"obra": "Auto de los Reyes Magos", "autor": "Anónimo", "sigla": "AutoReyesMagos(CEM)", "datacion": "c 1180",
+        "meta": {"obra": "Auto de los Reyes Magos", "codice": "BNE (ex Catedral de Toledo, 6-8)", "autor": "Anónimo", "sigla": "AutoReyesMagos(CEM)", "datacion": "c 1180",
                  "periodo": "Hacia 1180",
                  "edicion": "Auto de los Reyes Magos, in: Crestomatía del español medieval, por Ramón Menéndez Pidal con la colaboración del Centro de Estudios Históricos, acabada y revisada por Rafael Lapesa y María Soledad de Andrés, vol. I, Madrid 1971, 71-77.",
                  "texto": "DEMel, corpus de textos t0006 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
@@ -52,7 +52,7 @@ OBRAS = {
     "millan": {
         "tei": "t0120", "docs": "t0120_documentaciones.csv",
         "recorte": ("61r", None, "66r"),
-        "meta": {"obra": "Vida de San Millán (fragmento)", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
+        "meta": {"obra": "Vida de San Millán (fragmento)", "codice": "RAE, Ms. 4 (códice F)", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
                  "periodo": "Siglo XIII",
                  "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
                  "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
@@ -62,7 +62,7 @@ OBRAS = {
     "domingo": {
         "tei": "t0120", "docs": "t0120_documentaciones.csv",
         "recorte": ("66r", None, None),
-        "meta": {"obra": "Vida de Santo Domingo de Silos", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
+        "meta": {"obra": "Vida de Santo Domingo de Silos", "codice": "RAE, Ms. 4 (códice F)", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
                  "periodo": "Siglo XIII",
                  "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
                  "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
@@ -213,7 +213,7 @@ def resumen():
         d = json.loads(p.read_text(encoding="utf-8").partition('"]=')[2].rstrip().rstrip(";"))
         m = d["meta"]
         pal = sum(1 for f in d["folios"] for v in f["lines"] for t in v if re.search(f"[{LET}]", t["w"], re.I))
-        out.append({"id": obra, "titulo": m["obra"], "autor": m.get("autor", ""), "periodo": m.get("periodo", ""),
+        out.append({"id": obra, "titulo": m["obra"], "autor": m.get("autor", ""), "periodo": m.get("periodo", ""), "codice": m.get("codice", ""),
                     "versos": sum(len(f["lines"]) for f in d["folios"]), "folios": len(d["folios"]), "palabras": pal})
     open(f"{H}/web/data/obras.js", "w", encoding="utf-8", newline="\n").write("window.HYS_OBRAS=" + json.dumps(out, ensure_ascii=False, indent=1) + ";\n")
     print("obras.js:", ", ".join("%s (%d versos)" % (o["id"], o["versos"]) for o in out))

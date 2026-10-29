@@ -5,7 +5,7 @@ Tocá una palabra: la glosa muestra su lema, sus formas documentadas y desde cu�
 
 ## Cómo abrirlo
 En línea: GitHub Pages (el enlace figura arriba, en la descripción del repositorio).
-En tu computadora: abrí `index.html` (la portada, donde se elige el manuscrito) en el navegador; no necesita servidor ni instalación. Cada texto se abre en `web/index.html?obra=cid` o `?obra=oria`.
+En tu computadora: abrí `index.html` (la portada, donde se elige la transcripción) en el navegador; no necesita servidor ni instalación. Cada texto se abre en `web/index.html?obra=cid` o `?obra=oria`.
 
 ## Estructura
 - `index.html`: portada con un «códice» por obra (se arma sola desde `web/data/obras.js`).
@@ -37,7 +37,7 @@ La página ya trae sus datos (`web/data/<obra>.js`). Solo hace falta lo siguient
 2. `python3 scripts/extract_demel.py Mueller_Publicacion_2026_data.zip datos` y `python3 scripts/build_lemario.py Mueller_Publicacion_2026_data.zip datos` (leen el zip sin descomprimirlo).
 3. `python3 scripts/build_obra.py todas`.
 
-## Agregar un manuscrito
+## Agregar una transcripción
 1. En `scripts/build_obra.py`, sumar una entrada a `OBRAS` (código del TEI, archivo de documentaciones, recorte de folios y metadatos).
 2. `python3 scripts/proponer_manuales.py <obra>` crea `datos/manual/<obra>.csv` con las formas sin lema; completarlo y correr `build_obra.py` de nuevo.
   Si el texto no tiene aún `datos/<tNNNN>_documentaciones.csv`, `python3 scripts/extract_documentaciones.py <zip del DEMel> datos <tNNNN>` lo crea (trae las anotaciones del DEMel de ese texto).

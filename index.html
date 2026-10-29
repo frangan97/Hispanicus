@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hispanicus: elegí un manuscrito</title>
-<meta name="description" content="Lector de textos del español medieval con el léxico del Diccionario del Español Medieval electrónico: elegí un manuscrito, tocá una palabra y mirá su lema, sus formas y su origen.">
+<title>Hispanicus: elegí una transcripción</title>
+<meta name="description" content="Lector de textos del español medieval con el léxico del Diccionario del Español Medieval electrónico: elegí una transcripción paleográfica, tocá una palabra y mirá su lema, sus formas y su origen.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -31,41 +31,42 @@ a{color:inherit}
 .filete::before,.filete::after{content:"";display:inline-block;vertical-align:middle;width:min(9rem,22vw);height:1px;margin:0 .9rem;background:linear-gradient(90deg,#0000,var(--oro),#0000)}
 
 /* estante */
-.estante{list-style:none;margin:2.2rem auto 0;padding:0 1.25rem;max-width:60rem;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,20.5rem));gap:3rem 3.2rem;justify-content:center}
+.estante{list-style:none;margin:2rem auto 0;padding:0 1.25rem;max-width:62rem;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.4rem 1.7rem}
 .codice{display:block;text-decoration:none;color:inherit;border-radius:8px;outline-offset:8px}
 .codice:focus-visible{outline:2px solid #e9b84a}
-.tapa{position:relative;aspect-ratio:4/5;border-radius:3px 10px 10px 3px;padding:1.05rem 1.05rem 1.05rem 1.9rem;
+.tapa{position:relative;aspect-ratio:4/5;border-radius:3px 10px 10px 3px;padding:.8rem .8rem .8rem 1.45rem;
   background:linear-gradient(135deg,#76241b 0%,#531810 55%,#3c100b 100%);
   box-shadow:inset 0 0 0 2px #0007,inset 0 0 0 7px #7e2d22,inset 0 0 0 8px #d9b24c99,0 26px 38px -16px #000d,0 2px 0 #0008;
   transition:transform .28s ease,box-shadow .28s ease;transform-origin:left center}
-.tapa::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1.3rem;border-radius:3px 0 0 3px;
+.tapa::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1rem;border-radius:3px 0 0 3px;
   background:linear-gradient(90deg,#1f0907,#4a130d 55%,#5e1a12);box-shadow:inset -2px 0 0 #0005}
-.tapa::after{content:"";position:absolute;left:.62rem;top:1rem;bottom:1rem;width:2px;
+.tapa::after{content:"";position:absolute;left:.46rem;top:.8rem;bottom:.8rem;width:2px;
   background:repeating-linear-gradient(180deg,#d9b24c88 0 6px,#0000 6px 14px)}
 .codice:hover .tapa,.codice:focus-visible .tapa{transform:translateY(-8px) rotateY(-9deg);
   box-shadow:inset 0 0 0 2px #0007,inset 0 0 0 7px #7e2d22,inset 0 0 0 8px #d9b24c,0 36px 46px -16px #000,0 0 38px -6px #d9b24c55}
-.mini{width:100%;height:100%;display:block}
-.mini svg,.mini img{width:100%;height:100%;display:block;object-fit:cover}
+.mini{position:absolute;inset:.8rem .8rem .8rem 1.45rem;display:flex;align-items:center;justify-content:center}
+.mini svg{width:100%;height:100%;display:block}
+.mini img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;border:2px solid #d9b24c;box-shadow:0 5px 16px #000a}
 
-.rotulo{padding:1.1rem .3rem 0;text-align:center}
-.rotulo .genero{margin:0;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--desk-soft)}
-.rotulo h2{margin:.15rem 0 0;font-size:1.65rem;line-height:1.2;font-weight:400;font-style:italic;color:#f3e7c8}
-.rotulo .autor{margin:.1rem 0 0;font-size:.98rem;color:var(--desk-soft)}
-.rotulo .desc{margin:.7rem 0 0;font-size:1rem;line-height:1.5;color:var(--desk-ink);opacity:.9}
-.rotulo .cifras{margin:.7rem 0 0;font-size:.88rem;font-style:italic;color:var(--desk-soft)}
-.rotulo .abrir{display:inline-block;margin-top:.9rem;padding:.4rem 1.1rem;border:1px solid #8a7648;border-radius:3px;font-size:1rem;letter-spacing:.02em;transition:background .2s,border-color .2s,color .2s}
+.rotulo{padding:.9rem .1rem 0;text-align:center}
+.rotulo .genero{margin:0;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--desk-soft)}
+.rotulo h2{margin:.15rem 0 0;font-size:1.2rem;line-height:1.2;font-weight:400;font-style:italic;color:#f3e7c8}
+.rotulo .codice-sig{margin:.2rem 0 0;font-size:.76rem;letter-spacing:.03em;color:var(--oro)}
+.rotulo .autor{margin:.15rem 0 0;font-size:.82rem;color:var(--desk-soft)}
+.rotulo .desc{margin:.5rem 0 0;font-size:.84rem;line-height:1.45;color:var(--desk-ink);opacity:.9}
+.rotulo .cifras{margin:.5rem 0 0;font-size:.74rem;font-style:italic;color:var(--desk-soft)}
+.rotulo .abrir{display:inline-block;margin-top:.7rem;padding:.3rem .8rem;border:1px solid #8a7648;border-radius:3px;font-size:.82rem;letter-spacing:.02em;transition:background .2s,border-color .2s,color .2s}
 .codice:hover .abrir,.codice:focus-visible .abrir{background:var(--oro);border-color:var(--oro);color:#2b2119}
 
 .pie{max-width:46rem;margin:4rem auto 0;padding:0 1.25rem 3rem;text-align:center;font-size:.88rem;line-height:1.55;color:var(--desk-soft)}
 .pie p{margin:.4rem 0}
 noscript p{text-align:center;color:var(--desk-soft)}
 
-@media (max-width:560px){
-  body{font-size:18px}
+@media (max-width:900px){.estante{grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4rem 1.4rem;max-width:36rem}}
+@media (max-width:420px){
   .portada{padding-top:2.2rem}
-  .estante{gap:2.6rem}
-  .tapa{max-width:20.5rem;margin:0 auto}
+  .estante{grid-template-columns:minmax(0,17rem);justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){.tapa,.abrir{transition:none}.codice:hover .tapa,.codice:focus-visible .tapa{transform:none}}
 </style>
@@ -74,20 +75,20 @@ noscript p{text-align:center;color:var(--desk-soft)}
 <header class="portada">
   <p class="sobre">Léxico y evolución del español medieval</p>
   <h1>Hispanicus</h1>
-  <p class="bajada">Elegí un manuscrito. Tocá una palabra del texto y mirá su lema, sus formas, desde cuándo se documenta y de dónde puede venir.</p>
+  <p class="bajada">Elegí una transcripción paleográfica. Tocá una palabra del texto y mirá su lema, sus formas, desde cuándo se documenta y de dónde puede venir.</p>
   <div class="filete" aria-hidden="true">❦</div>
 </header>
 
 <main>
-  <ul class="estante" id="estante" aria-label="Manuscritos disponibles"></ul>
-  <noscript><p>Para ver los manuscritos hace falta activar JavaScript.</p></noscript>
+  <ul class="estante" id="estante" aria-label="Transcripciones disponibles"></ul>
+  <noscript><p>Para ver las transcripciones hace falta activar JavaScript.</p></noscript>
 </main>
 
 <footer class="pie">
-  <p>Textos y léxico: Diccionario del Español Medieval electrónico (DEMel), Universidad de Rostock, licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a> (<a href="https://doi.org/10.18453/rosdok_id00005463">textos</a>, <a href="https://doi.org/10.18453/rosdok_id00005462">léxico</a>). Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0). Las ilustraciones de las tapas son dibujos originales de este proyecto.</p>
+  <p>Textos y léxico: Diccionario del Español Medieval electrónico (DEMel), Universidad de Rostock, licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a> (<a href="https://doi.org/10.18453/rosdok_id00005463">textos</a>, <a href="https://doi.org/10.18453/rosdok_id00005462">léxico</a>). Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0). Las tapas de San Millán y Santo Domingo son dibujos originales de este proyecto; las imágenes de las tapas del Cid, Santa Oria y los Reyes Magos son ilustrativas (créditos y licencias: <span id="creditos">por completar</span>).</p>
 </footer>
 
-<script src="web/data/obras.js?v=3"></script>
+<script src="web/data/obras.js?v=4"></script>
 <script>
 (function(){
 "use strict";
@@ -234,18 +235,18 @@ function genericoSVG(titulo){
   return marco("cg2",fondo,e,"Ilustración: folio con una inicial decorada");
 }
 
-/* ---------- presentación de cada obra (para sumar un manuscrito: agregar una entrada) ---------- */
+/* ---------- presentación de cada obra (para sumar una transcripción: agregar una entrada) ---------- */
 /* foto: ruta a una imagen propia (p. ej. "web/img/cid.jpg"); si se indica, reemplaza al dibujo */
 var P={
   cid:{genero:"Cantar de gesta",
        desc:"El destierro, las conquistas y la honra de Rodrigo Díaz, el Cid. Copia de 1300-1400 conservada en la Biblioteca Nacional de España.",
-       svg:cidSVG, foto:null},
+       svg:cidSVG, foto:"web/img/mioCid.jpg"},
   oria:{genero:"Poema en cuaderna vía",
         desc:"La vida de la reclusa Oria y sus visiones, contada por Gonzalo de Berceo.",
-        svg:oriaSVG, foto:null},
+        svg:oriaSVG, foto:"web/img/oria.jpg"},
   reyes:{genero:"Teatro religioso",
          desc:"Tres reyes siguen una estrella y dudan ante Herodes: el texto teatral más antiguo que se conserva en castellano.",
-         svg:reyesSVG, foto:null},
+         svg:reyesSVG, foto:"web/img/ReyesMagos.jpg"},
   millan:{genero:"Poema en cuaderna vía",
           desc:"La vida del pastor y ermitaño riojano que llegó a santo, según Gonzalo de Berceo. Fragmento.",
           svg:millanSVG, foto:null},
@@ -265,17 +266,18 @@ var lista=document.getElementById("estante");
     '<a class="codice" href="web/?obra='+encodeURIComponent(o.id)+'" aria-label="Abrir '+esc(o.titulo)+'">'+
       '<div class="tapa"><div class="mini">'+arte+'</div></div>'+
       '<div class="rotulo">'+
-        '<p class="genero">'+esc(p.genero||"Manuscrito")+'</p>'+
+        '<p class="genero">'+esc(p.genero||"Transcripción")+'</p>'+
         '<h2>'+esc(o.titulo)+'</h2>'+
+        (o.codice?'<p class="codice-sig">'+esc(o.codice)+'</p>':'')+
         '<p class="autor">'+esc(o.autor)+(o.periodo?' · '+esc(o.periodo):'')+'</p>'+
         (p.desc?'<p class="desc">'+esc(p.desc)+'</p>':'')+
         '<p class="cifras">'+n(o.versos)+' versos · '+n(o.folios)+' folios · '+n(o.palabras)+' palabras</p>'+
-        '<span class="abrir">Abrir el manuscrito ›</span>'+
+        '<span class="abrir">Abrir la transcripción ›</span>'+
       '</div>'+
     '</a>';
   lista.appendChild(li);
 });
-if(!lista.children.length){lista.innerHTML='<li><p style="text-align:center;color:#a89878">No hay manuscritos cargados.</p></li>';}
+if(!lista.children.length){lista.innerHTML='<li><p style="text-align:center;color:#a89878">No hay transcripciones cargadas.</p></li>';}
 })();
 </script>
 </body>

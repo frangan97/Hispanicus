@@ -105,7 +105,7 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 <header class="top">
   <h1><a href="../">Hispanicus</a><span id="obraTit"></span></h1>
   <div class="ctl">
-    <a class="volver" href="../" title="Elegir otro manuscrito">‹ Manuscritos</a>
+    <a class="volver" href="../" title="Elegir otra transcripción">‹ Transcripciones</a>
     <button id="ant" type="button" aria-label="Folio anterior">‹</button>
     <select id="selFolio" aria-label="Ir a un folio"></select>
     <button id="sig" type="button" aria-label="Folio siguiente">›</button>
@@ -127,17 +127,17 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
   <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos. El DEMel reúne textos medievales: el «último registro» es la fecha más tardía que figura en su corpus, no indica que la palabra haya dejado de usarse.</p>
 </footer>
 
-<script src="data/evolucion.js?v=3"></script>
+<script src="data/evolucion.js?v=4"></script>
 <script>
 (function(){
 "use strict";
 var OBRA=((location.search.match(/[?&]obra=([a-z0-9_-]+)/i)||[])[1]||"cid").toLowerCase();
 function fallo(){
   document.title="Hispanicus";
-  document.getElementById("texto").innerHTML='<p class="estado">No se encontró ese manuscrito. <a href="../">Volver a la biblioteca</a>.</p>';
+  document.getElementById("texto").innerHTML='<p class="estado">No se encontró esa transcripción. <a href="../">Volver a la biblioteca</a>.</p>';
 }
 var sc=document.createElement("script");
-sc.src="data/"+encodeURIComponent(OBRA)+".js?v=3";
+sc.src="data/"+encodeURIComponent(OBRA)+".js?v=4";
 sc.onload=function(){var d=window.HYS_DATA&&window.HYS_DATA[OBRA];if(d)iniciar(d);else fallo();};
 sc.onerror=fallo;
 document.head.appendChild(sc);
@@ -146,7 +146,7 @@ function iniciar(D){
 var EVO=window.HYS_EVO||{};
 var F=D.folios, LM=D.lemmas, M=D.meta||{};
 document.title="Hispanicus: "+M.obra;
-document.getElementById("obraTit").textContent=M.obra;
+document.getElementById("obraTit").textContent=M.obra+(M.codice?" · "+M.codice:"");
 document.getElementById("fuenteObra").innerHTML=M.fuente_html||"";
 document.getElementById("metaDesc").setAttribute("content","Lector de "+M.obra+" con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.");
 var hayV=F.some(function(f){return f.lines.some(function(l){return l.some(function(t){return t.v;});});});

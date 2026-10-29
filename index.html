@@ -157,6 +157,73 @@ function oriaSVG(){
   return marco("co",fondo,e,"Ilustración original: una celda con una escalera de luz que sube a un cielo estrellado");
 }
 
+
+function reyesSVG(){
+  var fondo='<linearGradient id="rs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1b3f"/><stop offset=".6" stop-color="#1e5c7a"/><stop offset="1" stop-color="#e0a85a"/></linearGradient>'+
+    '<radialGradient id="rg"><stop offset="0" stop-color="#fff2b8" stop-opacity=".95"/><stop offset="1" stop-color="#fff2b8" stop-opacity="0"/></radialGradient>';
+  var rayos="";
+  for(var i=0;i<8;i++){
+    var a=i*Math.PI/4, r=i%2?26:46, b=Math.PI/16;
+    rayos+='<polygon points="120,70 '+(120+Math.cos(a-b)*9).toFixed(1)+','+(70+Math.sin(a-b)*9).toFixed(1)+' '+(120+Math.cos(a)*r).toFixed(1)+','+(70+Math.sin(a)*r).toFixed(1)+' '+(120+Math.cos(a+b)*9).toFixed(1)+','+(70+Math.sin(a+b)*9).toFixed(1)+'" fill="#fff0a8"/>';
+  }
+  function corona(x,y,c){
+    return '<g transform="translate('+x+' '+y+')"><path d="M-17 0L-20-20L-9-9L0-24L9-9L20-20L17 0Z" fill="'+c+'"/><rect x="-17" y="0" width="34" height="7" rx="2" fill="'+c+'"/><rect x="-17" y="2" width="34" height="2" fill="#7e2d22" opacity=".45"/>'+
+      '<circle cx="-20" cy="-21" r="2.6" fill="#fff2b8"/><circle cx="0" cy="-25" r="2.6" fill="#fff2b8"/><circle cx="20" cy="-21" r="2.6" fill="#fff2b8"/></g>';
+  }
+  var e='<rect width="240" height="300" fill="url(#rs)"/>'+
+    [[40,30],[70,60],[180,36],[206,80],[28,100],[210,130],[56,150],[170,150]].map(function(a){return '<circle cx="'+a[0]+'" cy="'+a[1]+'" r="1.4" fill="#fff3c4"/>';}).join("")+
+    '<circle cx="120" cy="70" r="62" fill="url(#rg)"/>'+rayos+'<circle cx="120" cy="70" r="7" fill="#fffbe0"/>'+
+    '<line x1="120" y1="86" x2="120" y2="150" stroke="#fff2b8" stroke-width="1.4" stroke-dasharray="2 5" opacity=".7"/>'+
+    corona(62,176,"#d9b24c")+corona(120,150,"#ecc866")+corona(178,176,"#d9b24c")+
+    '<path d="M0 236C40 214 82 226 120 232C160 238 200 212 240 226V300H0Z" fill="#8a5a33"/>'+
+    '<path d="M0 262C60 246 110 264 164 252C200 245 222 252 240 250V300H0Z" fill="#5d3a22"/>'+
+    '<g fill="#2a1a12"><path d="M30 262C34 244 44 240 52 246C58 236 70 238 72 252L72 262Z"/><rect x="66" y="232" width="4" height="22"/><circle cx="68" cy="230" r="4"/></g>';
+  return marco("cr",fondo,e,"Ilustración original: una estrella de ocho puntas sobre tres coronas y un desierto");
+}
+
+function millanSVG(){
+  var fondo='<linearGradient id="ms" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a4a6e"/><stop offset=".55" stop-color="#e9c47d"/><stop offset="1" stop-color="#efd9a0"/></linearGradient>';
+  var e='<rect width="240" height="300" fill="url(#ms)"/>'+
+    '<circle cx="172" cy="128" r="22" fill="#fff0b0"/><circle cx="172" cy="128" r="34" fill="#fff0b0" opacity=".25"/>'+
+    '<path d="M-10 214L58 120L98 168L148 98L250 224V310H-10Z" fill="#6c7a5a"/>'+
+    '<path d="M148 98L170 128L156 124L146 138L136 122L124 130Z" fill="#f3ead2" opacity=".9"/>'+
+    '<path d="M-10 238L40 186L86 226L132 178L190 234L250 196V310H-10Z" fill="#4a5a3f"/>'+
+    '<path d="M-10 270C40 252 86 270 140 260C190 252 220 262 250 258V310H-10Z" fill="#2f3a2a"/>'+
+    /* ermita y cueva */
+    '<rect x="96" y="236" width="48" height="34" fill="#cdbb94"/><polygon points="90,238 120,214 150,238" fill="#8a3a2c"/>'+
+    '<path d="M110 270V252A10 10 0 0 1 130 252V270Z" fill="#3a2418"/>'+
+    '<rect x="118.5" y="198" width="3" height="18" fill="#2b2118"/><rect x="113" y="203" width="14" height="3" fill="#2b2118"/>'+
+    /* ovejas */
+    '<g fill="#f6f0dc"><ellipse cx="48" cy="268" rx="11" ry="7"/><circle cx="39" cy="265" r="4.5" fill="#2b2118"/><ellipse cx="190" cy="274" rx="11" ry="7"/><circle cx="199" cy="271" r="4.5" fill="#2b2118"/></g>'+
+    '<g stroke="#2b2118" stroke-width="2"><line x1="44" y1="274" x2="44" y2="281"/><line x1="52" y1="274" x2="52" y2="281"/><line x1="186" y1="280" x2="186" y2="287"/><line x1="194" y1="280" x2="194" y2="287"/></g>';
+  return marco("cm",fondo,e,"Ilustración original: una ermita con una cruz entre montañas, con ovejas");
+}
+
+function domingoSVG(){
+  var fondo='<linearGradient id="ds" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8d3a0"/><stop offset="1" stop-color="#b98a52"/></linearGradient>';
+  function arco(x){
+    return '<path d="M'+(x-22)+' 224V158A22 22 0 0 1 '+(x+22)+' 158V224Z" fill="#2a1d14"/>'+
+      '<path d="M'+(x-22)+' 158A22 22 0 0 1 '+(x+22)+' 158" fill="none" stroke="#f0e2b8" stroke-width="3"/>'+
+      '<rect x="'+(x-30)+'" y="150" width="8" height="74" fill="#d6bf8a"/><rect x="'+(x+22)+'" y="150" width="8" height="74" fill="#d6bf8a"/>'+
+      '<rect x="'+(x-33)+'" y="146" width="14" height="6" fill="#e8d5a3"/><rect x="'+(x+19)+'" y="146" width="14" height="6" fill="#e8d5a3"/>';
+  }
+  function eslabon(x,y,r){
+    return '<ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="14" fill="none" stroke="#3a3430" stroke-width="5" transform="rotate('+r+' '+x+' '+y+')"/>';
+  }
+  var e='<rect width="240" height="300" fill="url(#ds)"/>'+
+    '<rect x="0" y="118" width="240" height="14" fill="#8a6338" opacity=".55"/>'+
+    '<rect x="0" y="132" width="240" height="94" fill="#c9a96d"/>'+
+    arco(52)+arco(120)+arco(188)+
+    '<rect x="0" y="224" width="240" height="80" fill="#8c6a3e"/>'+
+    '<path d="M0 238C60 230 180 230 240 238V304H0Z" fill="#6f5230"/>'+
+    /* cadena rota */
+    '<g>'+eslabon(86,60,12)+eslabon(98,82,-10)+eslabon(108,102,12)+'</g>'+
+    '<g>'+eslabon(150,64,-14)+eslabon(138,86,10)+'</g>'+
+    '<g fill="#ffe28a"><polygon points="124,64 129,76 141,72 133,82 140,93 127,89 121,100 119,87 106,84 117,77 114,65 121,73"/></g>'+
+    '<path d="M70 228h100l-8 16H78Z" fill="#4b3822"/>';
+  return marco("cd",fondo,e,"Ilustración original: arcos de un claustro románico y una cadena rota");
+}
+
 function genericoSVG(titulo){
   var ini=(titulo||"?").replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/,"").charAt(0).toUpperCase()||"?";
   var fondo='<linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eadfc0"/><stop offset="1" stop-color="#d4c394"/></linearGradient>';
@@ -175,7 +242,16 @@ var P={
        svg:cidSVG, foto:null},
   oria:{genero:"Poema en cuaderna vía",
         desc:"La vida de la reclusa Oria y sus visiones, contada por Gonzalo de Berceo.",
-        svg:oriaSVG, foto:null}
+        svg:oriaSVG, foto:null},
+  reyes:{genero:"Teatro religioso",
+         desc:"Tres reyes siguen una estrella y dudan ante Herodes: el texto teatral más antiguo que se conserva en castellano.",
+         svg:reyesSVG, foto:null},
+  millan:{genero:"Poema en cuaderna vía",
+          desc:"La vida del pastor y ermitaño riojano que llegó a santo, según Gonzalo de Berceo. Fragmento.",
+          svg:millanSVG, foto:null},
+  domingo:{genero:"Poema en cuaderna vía",
+           desc:"La vida de Domingo, abad del monasterio de Silos, sus milagros y la liberación de cautivos, según Berceo.",
+           svg:domingoSVG, foto:null}
 };
 
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}

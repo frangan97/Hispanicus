@@ -40,6 +40,35 @@ OBRAS = {
                  "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
                  "fuente_html": "Texto: <em>Vida de Santa Oria</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el pasaje de esa edición que corresponde a este poema (fols. 48v-60r), sin las demás obras de Berceo ni el epitafio final. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256."},
     },
+    "reyes": {
+        "tei": "t0006", "docs": "t0006_documentaciones.csv", "recorte": None,
+        "meta": {"obra": "Auto de los Reyes Magos", "autor": "Anónimo", "sigla": "AutoReyesMagos(CEM)", "datacion": "c 1180",
+                 "periodo": "Hacia 1180",
+                 "edicion": "Auto de los Reyes Magos, in: Crestomatía del español medieval, por Ramón Menéndez Pidal con la colaboración del Centro de Estudios Históricos, acabada y revisada por Rafael Lapesa y María Soledad de Andrés, vol. I, Madrid 1971, 71-77.",
+                 "texto": "DEMel, corpus de textos t0006 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
+                 "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
+                 "fuente_html": "Texto: <em>Auto de los Reyes Magos</em> (hacia 1180), según la edición de la <em>Crestomatía del español medieval</em> de Ramón Menéndez Pidal (con el Centro de Estudios Históricos; rev. de Rafael Lapesa y María Soledad de Andrés, 1971, pp. 71-77), tomada del corpus de textos del DEMel, texto t0006 (" + A_DOI_TXT + "). Las acotaciones con el nombre de quien habla no se muestran. La numeración de folios es la de las páginas de la edición impresa."},
+    },
+    "millan": {
+        "tei": "t0120", "docs": "t0120_documentaciones.csv",
+        "recorte": ("61r", None, "66r"),
+        "meta": {"obra": "Vida de San Millán (fragmento)", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
+                 "periodo": "Siglo XIII",
+                 "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
+                 "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
+                 "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
+                 "fuente_html": "Texto: <em>Vida de San Millán</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el fragmento de este poema que contiene esa edición (fols. 61r-65v; la edición del corpus es parcial y marca los saltos con [...]), sin las demás obras de Berceo. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256."},
+    },
+    "domingo": {
+        "tei": "t0120", "docs": "t0120_documentaciones.csv",
+        "recorte": ("66r", None, None),
+        "meta": {"obra": "Vida de Santo Domingo de Silos", "autor": "Gonzalo de Berceo", "sigla": "Berceo(Baranowski)", "datacion": "c 1230-c 1256",
+                 "periodo": "Siglo XIII",
+                 "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
+                 "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
+                 "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
+                 "fuente_html": "Texto: <em>Vida de Santo Domingo de Silos</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el pasaje de esa edición que corresponde a este poema (fols. 66r-113v), sin las demás obras de Berceo. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256."},
+    },
 }
 
 fold = lambda s: s.replace("v","u").replace("j","i").replace("y","i").replace("ç","z").replace("ſ","s").replace("ph","f")
@@ -67,7 +96,11 @@ TOK = re.compile(r"<pb[^>]*?n=\"([^\"]+)\"[^>]*/>|<seg\b([^>]*)>|</seg>|<[^>]+>|
 
 def construir(obra, cfg):
     OUT = ALT_OUT or f"{H}/web/data/{obra}.json"
-    att = {r["id"]: r for r in csv.DictReader(open(f"{H}/datos/{cfg['docs']}", encoding="utf-8"))}
+    fdocs = Path(f"{H}/datos/{cfg['docs']}")
+    if fdocs.exists(): att = {r["id"]: r for r in csv.DictReader(open(fdocs, encoding="utf-8"))}
+    else:
+        att = {}
+        print("AVISO: falta datos/%s (python3 scripts/extract_documentaciones.py): se construye sin las anotaciones del DEMel." % cfg["docs"])
     MAN_OBRA = {} if ALT_OUT else LZ.cargar_manual(f"{H}/datos/manual/{obra}.csv")
     SINT = {}
     def ids_manual(texto):
@@ -84,10 +117,16 @@ def construir(obra, cfg):
     body = open(f"{H}/Mueller_Corpus_2026_data/texts/tei/demel_{cfg['tei']}.tei.xml", encoding="utf-8").read()
     body = body[body.index("<body"):body.index("</body>")]
     if cfg["recorte"]:
-        ini, fin_txt = cfg["recorte"]
+        ini, fin_txt, *resto = cfg["recorte"]
         a = re.search(r'<pb[^>]*n="%s"[^>]*/>' % re.escape(ini), body).start()
-        b = body.index("\n", body.index(fin_txt, a))
+        if fin_txt:                                         # termina en la línea que contiene fin_txt
+            b = body.index("\n", body.index(fin_txt, a))
+        elif resto and resto[0]:                            # termina donde empieza otro folio (pb)
+            b = re.search(r'<pb[^>]*n="%s"[^>]*/>' % re.escape(resto[0]), body[a:]).start() + a
+        else:
+            b = len(body)
         body = body[a:b]
+    body = re.sub(r"<speaker>.*?</speaker>", "", body, flags=re.S)
     folios, cur, verse = [], None, []
     seg_ids = []
     def flush():

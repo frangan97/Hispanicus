@@ -1,6 +1,6 @@
 # Hispanicus
 
-Lector de textos del español medieval (*Cantar de mio Cid*, *Vida de Santa Oria*) con el léxico del Diccionario del Español Medieval electrónico (DEMel).
+Lector de textos del español medieval (*Cantar de mio Cid*, *Auto de los Reyes Magos* y tres obras de Berceo) con el léxico del Diccionario del Español Medieval electrónico (DEMel).
 Tocá una palabra: la glosa muestra su lema, sus formas documentadas y desde cuándo se registra.
 
 ## Cómo abrirlo
@@ -16,7 +16,7 @@ En tu computadora: abrí `index.html` (la portada, donde se elige el manuscrito)
   - `build_obra.py [cid|oria|todas]`: genera `web/data/<obra>.json/.js` y `obras.js` desde el TEI del corpus (`build_cid.py` es un atajo para el Cid).
 - `datos/manual/`: tablas de lemas que se corrigen a mano (abrir con Excel).
   - `comunes.csv`: formas ambiguas (de, al, se, es...). Valen para todas las obras.
-  - `cid.csv`, `oria.csv`: formas sin lema de esa obra (nombres propios, formas raras). Cada obra tiene su archivo.
+  - `cid.csv`, `oria.csv`, `reyes.csv`, `millan.csv`, `domingo.csv`: formas sin lema de esa obra (nombres propios, formas raras). Cada obra tiene su archivo.
   - Columnas: forma; lema; estado (`propuesta`, `ok` o `descartar`); el resto es informativo.
   - Orden de prioridad: anotación del DEMel > tabla de la obra > tabla común > reglas automáticas.
   - `scripts/proponer_manuales.py` agrega formas nuevas sin tocar las filas existentes.
@@ -40,4 +40,5 @@ La página ya trae sus datos (`web/data/<obra>.js`). Solo hace falta lo siguient
 ## Agregar un manuscrito
 1. En `scripts/build_obra.py`, sumar una entrada a `OBRAS` (código del TEI, archivo de documentaciones, recorte de folios y metadatos).
 2. `python3 scripts/proponer_manuales.py <obra>` crea `datos/manual/<obra>.csv` con las formas sin lema; completarlo y correr `build_obra.py` de nuevo.
+  Si el texto no tiene aún `datos/<tNNNN>_documentaciones.csv`, `python3 scripts/extract_documentaciones.py <zip del DEMel> datos <tNNNN>` lo crea (trae las anotaciones del DEMel de ese texto).
 3. En `index.html` (portada), sumar su entrada en el objeto `P` (género, descripción y dibujo). Para usar una imagen propia en vez del dibujo: poner el archivo en `web/img/` y escribir su ruta en `foto`.

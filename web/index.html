@@ -252,6 +252,7 @@ function glosar(vi,ti){
   gin.appendChild(el("p","donde","fol. "+F[cur].n+", verso "+(offs[cur]+vi+1)));
   var est;
   if(tok.v)est="El DEMel anota esta palabra en este pasaje.";
+  else if(tok.ad)est="Adverbio en -mientre: el texto lo escribe en dos palabras, pero se lee como una sola unidad (forma antigua de -mente). Como conjunción, «mientre» va solo.";
   else if(tok.x===1)est="Lema fijado a mano en la tabla de lemas.";
   else if(tok.x===2)est="Lema propuesto en la tabla de lemas, todavía sin revisar.";
   else if(tok.g)est="El DEMel no documenta esta forma como una sola palabra. Se separó en «"+tok.g.join("» + «")+"»; la separación puede ser incorrecta.";

@@ -113,6 +113,35 @@ def construir(obra, cfg):
             if lid not in out: out.append(lid)
         return out
 
+    # --- adverbios en -mientre escritos en dos palabras («fuerte mientre» = fuertemientre < forte mente)
+    # «mientre» solo es conjunción («mientre que»); es adverbio si lo precede un adjetivo o un participio
+    # sin signo de puntuación entre ambos. Se unen en una sola unidad de lectura con un único lema.
+    RE_MIENTRE = re.compile(r"^mie?ntre$")
+    RE_PART = re.compile(r"(ad|id)[ao]s?$")
+    def unir_adverbios(verse):
+        out = []
+        for t in verse:
+            core = "".join(re.findall(f"[{LET}]", t["w"].lower()))
+            prev = out[-1] if out else None
+            if prev and RE_MIENTRE.match(fold(core)) and re.search(f"[{LET}]$", prev["w"], re.I) and not prev.get("ad"):
+                pcore = "".join(re.findall(f"[{LET}]", prev["w"].lower()))
+                cats = [c for l in prev.get("l", []) if l in lemario for c in lemario[l]["categorias"].split("|")]
+                es_adj = any(c.startswith("adj") for c in cats)
+                es_part = RE_PART.search(fold(pcore)) and any(c.startswith("verb") for c in cats)   # biltada, ondrada...
+                if pcore and (es_adj or es_part):
+                    c = fidx.get(fold(pcore + "mientre"), {})            # forma documentada: fuertemientre -> fuertemente
+                    lids = [LZ.elegir(c) or max(c, key=c.get)] if c else []
+                    if not lids:
+                        for nom in (pcore + "mente", "h" + pcore + "mente"):
+                            if NOM.get(nom): lids = [NOM[nom]]; break
+                    if not lids: lids = ids_manual(pcore + "mientre")
+                    used.update(lids)
+                    out[-1] = {"w": prev["w"] + " " + t["w"], "l": lids, "ad": 1}
+                    cnt["adverbio_mientre"] += 1
+                    continue
+            out.append(t)
+        return out
+
     # --- TEI -> folios / versos / palabras
     body = open(f"{H}/Mueller_Corpus_2026_data/texts/tei/demel_{cfg['tei']}.tei.xml", encoding="utf-8").read()
     body = body[body.index("<body"):body.index("</body>")]
@@ -131,7 +160,7 @@ def construir(obra, cfg):
     seg_ids = []
     def flush():
         nonlocal verse
-        if verse and cur is not None: cur["lines"].append(verse)
+        if verse and cur is not None: cur["lines"].append(unir_adverbios(verse))
         verse = []
     used = set(); n_ver = 0; cnt = collections.Counter()
     for line in body.split("\n"):

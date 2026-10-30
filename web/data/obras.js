@@ -7,7 +7,7 @@ window.HYS_OBRAS=[
   "codice": "BNE, Vitr. 7-17",
   "versos": 3711,
   "folios": 147,
-  "palabras": 28351
+  "palabras": 28337
  },
  {
   "id": "oria",

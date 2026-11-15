@@ -1,0 +1,373 @@
+[
+ {
+  "id": "hiato",
+  "etapa": "romance",
+  "nombre": "e, i átonas en hiato se hacen yod",
+  "fuente": "Manual §8 bis, §53",
+  "ejemplo": "fílius > fílju"
+ },
+ {
+  "id": "j_inicial",
+  "etapa": "romance",
+  "nombre": "J- inicial ante o, u > ʒ",
+  "fuente": "Manual §38.3",
+  "ejemplo": "iocu > ʒuego (juego)"
+ },
+ {
+  "id": "sc_ante_e_i",
+  "etapa": "romance",
+  "nombre": "sc ante e, i > ts",
+  "fuente": "Manual §47.2",
+  "ejemplo": "nascere > naçer"
+ },
+ {
+  "id": "tj_kj_vocal",
+  "etapa": "romance",
+  "nombre": "-tj-, -kj- tras vocal > dz",
+  "fuente": "Manual §53.4",
+  "ejemplo": "ratione > raʣón"
+ },
+ {
+  "id": "tj_kj_cons",
+  "etapa": "romance",
+  "nombre": "tj, kj tras consonante o inicial > ts",
+  "fuente": "Manual §53.4",
+  "ejemplo": "fortia > fuerça"
+ },
+ {
+  "id": "c_ante_e_i_vocal",
+  "etapa": "romance",
+  "nombre": "-c- ante e, i entre vocales > dz",
+  "fuente": "Manual §42.3",
+  "ejemplo": "dicere > diʣir"
+ },
+ {
+  "id": "c_ante_e_i",
+  "etapa": "romance",
+  "nombre": "c ante e, i > ts",
+  "fuente": "Manual §34, §42.3",
+  "ejemplo": "centum > çiento"
+ },
+ {
+  "id": "g_inicial_e_i",
+  "etapa": "romance",
+  "nombre": "g- inicial ante e, i > yod",
+  "fuente": "Manual §38.3",
+  "ejemplo": "gelu > jelo (yelo)"
+ },
+ {
+  "id": "dj_gj",
+  "etapa": "romance",
+  "nombre": "-dj-, -gj- > yod",
+  "fuente": "Manual §53.3",
+  "ejemplo": "radiu > rajo (rayo)"
+ },
+ {
+  "id": "dj_cons",
+  "etapa": "romance",
+  "nombre": "dj tras consonante > ts",
+  "fuente": "Manual §53.3",
+  "ejemplo": "hordeolu > orçuelo"
+ },
+ {
+  "id": "lj",
+  "etapa": "romance",
+  "nombre": "lj > ʒ",
+  "fuente": "Manual §53.6",
+  "ejemplo": "filiu > fiʒo"
+ },
+ {
+  "id": "nj",
+  "etapa": "romance",
+  "nombre": "nj > ɲ",
+  "fuente": "Manual §53.5",
+  "ejemplo": "vinea > viɲa"
+ },
+ {
+  "id": "labial_yod",
+  "etapa": "romance",
+  "nombre": "yod tras labial se queda como i",
+  "fuente": "Manual §53.1",
+  "ejemplo": "labiu > labio"
+ },
+ {
+  "id": "ns",
+  "etapa": "romance",
+  "nombre": "-ns- > s sonora",
+  "fuente": "Manual §47.2",
+  "ejemplo": "mensa > meza (mesa)"
+ },
+ {
+  "id": "mb",
+  "etapa": "romance",
+  "nombre": "-mb- > m",
+  "fuente": "Manual §47.2",
+  "ejemplo": "palumba > paloma"
+ },
+ {
+  "id": "pt_ps",
+  "etapa": "romance",
+  "nombre": "pt > t, ps > s (asimilación)",
+  "fuente": "Manual §49",
+  "ejemplo": "septem > sette > siete"
+ },
+ {
+  "id": "ct",
+  "etapa": "romance",
+  "nombre": "ct > it > ch",
+  "fuente": "Manual §50.1",
+  "ejemplo": "fictu > fito"
+ },
+ {
+  "id": "ct2",
+  "etapa": "romance",
+  "nombre": "-ct- > ich (yod 4.ª)",
+  "fuente": "Manual §50.1",
+  "ejemplo": "nocte > noiʧe > noche"
+ },
+ {
+  "id": "x",
+  "etapa": "romance",
+  "nombre": "x (cs) > ʃ",
+  "fuente": "Manual §50.2",
+  "ejemplo": "dixi > diʃe (dije)"
+ },
+ {
+  "id": "ult",
+  "etapa": "romance",
+  "nombre": "ult > uich > uch",
+  "fuente": "Manual §47.2",
+  "ejemplo": "multu > muitu > mucho"
+ },
+ {
+  "id": "gn",
+  "etapa": "romance",
+  "nombre": "gn > ɲ",
+  "fuente": "Manual §50.3",
+  "ejemplo": "ligna > leɲa"
+ },
+ {
+  "id": "nct",
+  "etapa": "romance",
+  "nombre": "nkt > nt",
+  "fuente": "Manual §51.2",
+  "ejemplo": "punctu > punto"
+ },
+ {
+  "id": "rs",
+  "etapa": "romance",
+  "nombre": "rs > ss",
+  "fuente": "Manual §47.2",
+  "ejemplo": "ursu > osso"
+ },
+ {
+  "id": "grupo_inicial_l",
+  "etapa": "romance",
+  "nombre": "pl-, cl-, fl- iniciales > ʎ",
+  "fuente": "Manual §39.2",
+  "ejemplo": "plenu > ʎeno (lleno)"
+ },
+ {
+  "id": "gl_inicial",
+  "etapa": "romance",
+  "nombre": "gl- inicial > l-",
+  "fuente": "Manual §39.2",
+  "ejemplo": "glandula > landre"
+ },
+ {
+  "id": "prostesis",
+  "etapa": "romance",
+  "nombre": "prótesis de e- ante s + consonante",
+  "fuente": "Manual §39.3",
+  "ejemplo": "scribere > escribir"
+ },
+ {
+  "id": "qu_inicial_ei",
+  "etapa": "romance",
+  "nombre": "qu- ante e, i pierde la u",
+  "fuente": "Manual §39.4",
+  "ejemplo": "quem > quien"
+ },
+ {
+  "id": "qua_atona",
+  "etapa": "romance",
+  "nombre": "qua- átono pierde la u",
+  "fuente": "Manual §39.4",
+  "ejemplo": "quattuordecim > catorze"
+ },
+ {
+  "id": "perdida_g_d",
+  "etapa": "romance",
+  "nombre": "-g-, -d- ante e, i se pierden",
+  "fuente": "Manual §41, §43",
+  "ejemplo": "regina > reina, pede > pie"
+ },
+ {
+  "id": "f_v_inter",
+  "etapa": "romance",
+  "nombre": "-f- intervocálica > v",
+  "fuente": "Manual §42.2",
+  "ejemplo": "profectu > provecho"
+ },
+ {
+  "id": "perdida_v_ivu",
+  "etapa": "romance",
+  "nombre": "-v- entre i y u/o final se pierde (-ivu > -io)",
+  "fuente": "Manual §43.2",
+  "ejemplo": "vacivu > vacio"
+ },
+ {
+  "id": "sonorizacion",
+  "etapa": "romance",
+  "nombre": "oclusivas sordas intervocálicas > sonoras",
+  "fuente": "Manual §40, §48; Ariza cap. 7",
+  "ejemplo": "lupu > lobo, vita > vida"
+ },
+ {
+  "id": "s_sonora",
+  "etapa": "romance",
+  "nombre": "-s- intervocálica > s sonora",
+  "fuente": "Manual §42.1",
+  "ejemplo": "casa > caza (sonora)"
+ },
+ {
+  "id": "perdida_j",
+  "etapa": "romance",
+  "nombre": "yod intervocálica junto a vocal anterior se pierde",
+  "fuente": "Manual §43.1",
+  "ejemplo": "pejore > peor"
+ },
+ {
+  "id": "geminadas",
+  "etapa": "romance",
+  "nombre": "geminadas simplificadas o palatalizadas",
+  "fuente": "Manual §45-46",
+  "ejemplo": "bucca > boca, annu > aɲo"
+ },
+ {
+  "id": "au",
+  "etapa": "romance",
+  "nombre": "au > o",
+  "fuente": "Manual §47.3 (paucu > poco)",
+  "ejemplo": "paucu > poco"
+ },
+ {
+  "id": "sincopa_post",
+  "etapa": "romance",
+  "nombre": "pérdida de la vocal postónica penúltima",
+  "fuente": "Manual §25, §54",
+  "ejemplo": "tabula > tabla"
+ },
+ {
+  "id": "sincopa_inter",
+  "etapa": "romance",
+  "nombre": "pérdida de vocales intertónicas",
+  "fuente": "Manual §54",
+  "ejemplo": "veritate > verdad"
+ },
+ {
+  "id": "grupos_romances",
+  "etapa": "romance",
+  "nombre": "grupos romances secundarios (m'd > nd, m'n > mbr, g'l > ʒ…)",
+  "fuente": "Manual §54-59",
+  "ejemplo": "nomine > nombre, comite > conde"
+ },
+ {
+  "id": "ai_yod",
+  "etapa": "romance",
+  "nombre": "a + yod de ch/x > e",
+  "fuente": "Manual §8 bis, §50 (lacte > leche)",
+  "ejemplo": "lacte > leche"
+ },
+ {
+  "id": "eir",
+  "etapa": "romance",
+  "nombre": "-airo > -eiro (-ariu > -ero)",
+  "fuente": "Manual §53",
+  "ejemplo": "tertiariu > terçero"
+ },
+ {
+  "id": "diptongo_E",
+  "etapa": "medieval",
+  "nombre": "Ĕ tónica > ie (salvo ante yod/palatal)",
+  "fuente": "Manual §10; Ariza cap. 4.2",
+  "ejemplo": "pĕde > pie"
+ },
+ {
+  "id": "diptongo_O",
+  "etapa": "medieval",
+  "nombre": "Ŏ tónica > ue (salvo ante yod/palatal)",
+  "fuente": "Manual §13; Ariza cap. 4.2",
+  "ejemplo": "fŏcu > fuego"
+ },
+ {
+  "id": "absorcion_yod",
+  "etapa": "medieval",
+  "nombre": "la yod absorbida por ch / x",
+  "fuente": "Manual §50",
+  "ejemplo": "noiʧe > noʧe"
+ },
+ {
+  "id": "apocope",
+  "etapa": "medieval",
+  "nombre": "apócope de -e tras d, n, l, r, s, z (regular)",
+  "fuente": "Manual §28.3, §63.1",
+  "ejemplo": "mare > mar, sale > sal"
+ },
+ {
+  "id": "apocope_extrema",
+  "etapa": "medieval",
+  "nombre": "apócope extrema de -e (siglos XII-XIII): tras t, ch, ñ, ll, x…",
+  "fuente": "Manual §63.2",
+  "ejemplo": "noche > noch, siete > siet, monte > mont"
+ },
+ {
+  "id": "eiro",
+  "etapa": "medieval",
+  "nombre": "-eiro > -ero",
+  "fuente": "Manual §53",
+  "ejemplo": "primeiro > primero"
+ },
+ {
+  "id": "f_inicial",
+  "etapa": "actual",
+  "nombre": "f- inicial > h- muda (se conserva ante ue)",
+  "fuente": "Manual §38; Ariza cap. 7.3",
+  "ejemplo": "ferro > hierro"
+ },
+ {
+  "id": "ie_inicial",
+  "etapa": "actual",
+  "nombre": "ie- inicial se escribe ye-",
+  "fuente": "Manual §10",
+  "ejemplo": "equa > yegua"
+ },
+ {
+  "id": "ue_inicial",
+  "etapa": "actual",
+  "nombre": "ue- inicial se escribe hue-",
+  "fuente": "Manual §13",
+  "ejemplo": "ossu > hueso"
+ },
+ {
+  "id": "sibilantes",
+  "etapa": "actual",
+  "nombre": "reajuste de sibilantes (ç, z > θ; ʃ, ʒ > jota)",
+  "fuente": "Manual §35 bis; Ariza cap. 8.3",
+  "ejemplo": "ʣ > θ"
+ },
+ {
+  "id": "iello_illo",
+  "etapa": "actual",
+  "nombre": "-iello > -illo",
+  "fuente": "Manual §10.2",
+  "ejemplo": "castiello > castillo"
+ },
+ {
+  "id": "restituye_e",
+  "etapa": "actual",
+  "nombre": "el español actual restituye -e salvo tras d, n, l, r, s, z",
+  "fuente": "Manual §63.3",
+  "ejemplo": "mont > monte"
+ }
+]

@@ -5,7 +5,11 @@ Entradas:
   datos/verificacion_cid.xlsx     (opcional) tu revisión manual: Estado, Fuente verificada y étimo corregido
 
 Reglas:
-  - Solo se incluyen los lemas que figuran en alguna obra (web/data/<obra>.json).
+  - Solo se incluyen los lemas que figuran en alguna obra (web/data/<obra>.json, o si no están, web/data/<obra>.js).
+  - Precálculo (motor/): si el étimo es una sola palabra latina y la derivación del motor de reglas queda corroborada
+    por el lema actual o por una forma medieval documentada, se escribe la cadena completa (latín > latín vulgar >
+    romance temprano > medieval > actual) y los cambios. Sigue «pendiente»: sólo la hoja con fuente verifica.
+    Un lema verificado nunca se pisa con el motor. Columna opcional H de la hoja: «Étimo marcado» (con cantidades: ĕ, ŏ, ā…).
   - Un lema queda «verificado» únicamente si en la hoja tiene Estado = verificado Y una Fuente verificada.
     Sin fuente se trata como pendiente (la IA no inventa etimologías; si una fuente no lo dice, la celda queda vacía).
   - Si corregís el étimo en la hoja, deja de valer la fuente del Wikcionario: se usa tu Fuente verificada.
@@ -20,6 +24,13 @@ RAIZ = Path(__file__).resolve().parent.parent
 CSV_WIKT = RAIZ / "datos" / "evolucion_wiktionary.csv"
 XLSX = RAIZ / "datos" / "verificacion_cid.xlsx"
 OBRAS_JSON = sorted((RAIZ / "web" / "data").glob("*.json"))
+OBRAS_JS = [f for f in sorted((RAIZ / "web" / "data").glob("*.js")) if f.stem not in ("evolucion", "obras")]
+sys.path.insert(0, str(RAIZ / "motor"))
+try:
+    from precalculo import derivacion_corroborada, cambios_cortos, fuentes_motor
+except Exception as exc:          # sin motor/ el script funciona como antes
+    derivacion_corroborada = None
+    print("AVISO: no se pudo cargar motor/ (%s); sin cadenas calculadas." % exc, file=sys.stderr)
 SALIDA = RAIZ / "web" / "data" / "evolucion.js"
 
 CABECERA = """/* Tabla de evolución. Una entrada por lema (nombre del lema como en el DEMel, p. ej. "noche").
@@ -54,10 +65,25 @@ def fuentes_wikt(texto):
             out.append(s)
     return out
 
+def leer_obras():
+    """Devuelve {lema: set(formas gráficas)} de todas las obras. Prefiere .json; si faltan (están en .gitignore), usa .js."""
+    datos = []
+    if OBRAS_JSON:
+        datos = [json.load(open(f, encoding="utf-8")) for f in OBRAS_JSON]
+    else:
+        for f in OBRAS_JS:
+            t = f.read_text(encoding="utf-8").partition('"]=')[2].rstrip().rstrip(";")
+            if t:
+                datos.append(json.loads(t))
+    out = {}
+    for d in datos:
+        for v in d["lemmas"].values():
+            out.setdefault(v["n"], set()).update(v.get("fm", []))
+    return out
+
 def main():
-    lemas_cid = set()
-    for f in OBRAS_JSON:
-        lemas_cid |= {v["n"] for v in json.load(open(f, encoding="utf-8"))["lemmas"].values()}
+    formas_de = leer_obras()
+    lemas_cid = set(formas_de)
     base = {}
     for r in csv.DictReader(open(CSV_WIKT, encoding="utf-8-sig"), delimiter=";"):
         if r["etimo"].strip():
@@ -68,10 +94,11 @@ def main():
             from openpyxl import load_workbook
             for fila in load_workbook(XLSX, read_only=True, data_only=True)["Cid"].iter_rows(min_row=2, values_only=True):
                 if fila[0]:
-                    hoja[str(fila[0]).strip()] = [("" if c is None else str(c).strip()) for c in fila[:7]]
+                    f8 = list(fila[:8]) + [None] * (8 - len(fila[:8]))
+                    hoja[str(fila[0]).strip()] = [("" if c is None else str(c).strip()) for c in f8]
         except ImportError:
             print("AVISO: falta openpyxl (pip install openpyxl); se ignora la hoja de verificación.", file=sys.stderr)
-    evo, avisos = {}, []
+    evo, avisos, calculados = {}, [], []
     for lema in sorted(lemas_cid | set(hoja)):
         if lema not in lemas_cid or re.fullmatch(r"[IVXLCDM]+", lema):   # sin números romanos (D, V…)
             continue
@@ -101,6 +128,15 @@ def main():
             fuentes = ["Sin fuente indicada"]
         e = {"cadena": cadena_de(etimo), "cambios": [], "fuentes": fuentes,
              "estado": "verificado" if verificado else "pendiente"}
+        if not verificado and derivacion_corroborada:
+            marcado = h[7] if h and len(h) > 7 and h[7] else etimo
+            d, porque = derivacion_corroborada(marcado, lema, formas_de.get(lema, ()))
+            if d:
+                e["cadena"] = d.cadena
+                e["cambios"] = cambios_cortos(d)
+                e["fuentes"] = fuentes + ["Motor de reglas fonéticas de Hispanicus (motor/REGLAS.md): " + "; ".join(fuentes_motor(d))]
+                nota = (nota + " Cadena calculada por el motor de reglas (%s); no verificada contra la bibliografía." % porque).strip()
+                calculados.append(lema)
         if nota:
             e["nota"] = nota
         evo[lema] = e
@@ -108,6 +144,7 @@ def main():
     SALIDA.write_text(CABECERA + "window.HYS_EVO = {\n" + cuerpo + "\n};\n", encoding="utf-8", newline="\n")
     ver = sum(1 for v in evo.values() if v["estado"] == "verificado")
     print("evolucion.js: %d lemas con étimo (%d verificados, %d pendientes) de %d lemas de las obras" % (len(evo), ver, len(evo) - ver, len(lemas_cid)))
+    print("  con cadena calculada por el motor: %d" % len(calculados))
     for a in avisos:
         print("AVISO:", a, file=sys.stderr)
 

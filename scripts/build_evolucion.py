@@ -135,7 +135,7 @@ def main():
                 e["cadena"] = d.cadena
                 e["cambios"] = cambios_cortos(d)
                 e["fuentes"] = fuentes + ["Motor de reglas fonéticas de Hispanicus (motor/REGLAS.md): " + "; ".join(fuentes_motor(d))]
-                nota = (nota + " Cadena calculada por el motor de reglas (%s); no verificada contra la bibliografía." % porque).strip()
+                nota = (nota + " Cadena calculada por el motor de reglas (%s)." % porque).strip()
                 calculados.append(lema)
         if nota:
             e["nota"] = nota

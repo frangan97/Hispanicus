@@ -137,7 +137,7 @@ function fallo(){
   document.getElementById("texto").innerHTML='<p class="estado">No se encontró esa transcripción. <a href="../">Volver a la biblioteca</a>.</p>';
 }
 var sc=document.createElement("script");
-sc.src="data/"+encodeURIComponent(OBRA)+".js?v=4";
+sc.src="data/"+encodeURIComponent(OBRA)+".js?v=5";
 sc.onload=function(){var d=window.HYS_DATA&&window.HYS_DATA[OBRA];if(d)iniciar(d);else fallo();};
 sc.onerror=fallo;
 document.head.appendChild(sc);

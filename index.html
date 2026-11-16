@@ -3,346 +3,281 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hispanicus</title>
-<meta id="metaDesc" name="description" content="Lector de textos medievales con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.">
+<title>Hispanicus: elegí una transcripción</title>
+<meta name="description" content="Lector de textos del español medieval con el léxico del Diccionario del Español Medieval electrónico: elegí una transcripción paleográfica, tocá una palabra y mirá su lema, sus formas y su origen.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --desk:#26201a; --desk-ink:#eadfc4; --desk-soft:#a89878;
-  --vell:#e6dabb; --vell2:#d8c9a2; --rule:#c4b48a;
-  --ink:#2b2119; --ink-soft:#6b5a43;
-  --minio:#a3281d; --lapis:#28478a;
+  --vell:#e6dabb; --rule:#c4b48a;
+  --minio:#a3281d; --lapis:#28478a; --oro:#d9b24c;
 }
 *{box-sizing:border-box}
-html{background:var(--desk);color:var(--desk-ink)}
-body{margin:0;font:19px/1.65 Cardo,"Palatino Linotype","Book Antiqua",Cambria,"Segoe UI Historic","Segoe UI Symbol",serif;-webkit-text-size-adjust:100%}
+html{background:#1c1611}
+body{margin:0;min-height:100vh;color:var(--desk-ink);
+  background:radial-gradient(ellipse 80% 55% at 50% 0%,#4d3a24 0%,#2c231a 48%,#1c1611 100%) fixed;
+  font:19px/1.65 Cardo,"Palatino Linotype","Book Antiqua",Cambria,"Segoe UI Historic","Segoe UI Symbol",serif;-webkit-text-size-adjust:100%}
 a{color:inherit}
-button,select,input{font:inherit;color:inherit}
 
-/* barra superior sobre el escritorio */
-.top{max-width:72rem;margin:0 auto;padding:1.2rem 1.25rem .9rem;display:flex;flex-wrap:wrap;gap:.8rem 1.6rem;align-items:center;justify-content:space-between}
-.top h1{margin:0;font-size:1.5rem;font-weight:400;font-style:italic;letter-spacing:.01em}
-.top h1 span{font-style:normal;font-size:.9rem;color:var(--desk-soft);margin-left:.6rem}
-.top h1 a{text-decoration:none}
-.top h1 a:hover{text-decoration:underline;text-underline-offset:.2em}
-.top .volver{border:1px solid #6f6044;border-radius:3px;padding:.3rem .65rem;font-size:.95rem;text-decoration:none;white-space:nowrap}
-.top .volver:hover{background:#3a3026}
-.ctl{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-.top button,.top select,.top input{background:transparent;border:1px solid #6f6044;border-radius:3px;padding:.3rem .65rem;font-size:.95rem}
-.top button{cursor:pointer;min-width:2.2rem}
-.top button:hover:not(:disabled){background:#3a3026}
-.top button:disabled{opacity:.35;cursor:default}
-.top select option{color:#222;background:#fff}
-.top input{width:12rem}
-.top input::placeholder{color:var(--desk-soft);font-style:italic}
-:is(button,select,input,.w,a):focus-visible{outline:2px solid #e9b84a;outline-offset:2px}
+/* portada */
+.portada{text-align:center;padding:3.2rem 1.25rem 1.2rem}
+.sobre{margin:0;font-size:.85rem;letter-spacing:.28em;text-transform:uppercase;color:var(--desk-soft)}
+.portada h1{margin:.3rem 0 .2rem;font-size:clamp(2.8rem,8vw,4.6rem);line-height:1.05;font-weight:400;font-style:italic;letter-spacing:.01em;
+  color:#f3e7c8;text-shadow:0 2px 0 #0006,0 0 28px #d9b24c33}
+.bajada{margin:.4rem auto 0;max-width:34rem;font-size:1.08rem;color:var(--desk-ink);opacity:.92}
+.filete{margin:1.2rem auto 0;color:var(--oro);font-size:1.4rem;line-height:1}
+.filete::before,.filete::after{content:"";display:inline-block;vertical-align:middle;width:min(9rem,22vw);height:1px;margin:0 .9rem;background:linear-gradient(90deg,#0000,var(--oro),#0000)}
 
-/* la hoja */
-.hoja{max-width:72rem;margin:0 auto 2rem;background:var(--vell);color:var(--ink);display:grid;grid-template-columns:minmax(0,1.55fr) minmax(19rem,1fr);box-shadow:0 1px 0 #0006,0 18px 40px -12px #000a;border-radius:2px}
-.texto{padding:1.4rem 1.2rem 1.6rem 1.4rem}
-.folio{margin:0 0 .6rem;font-size:1.05rem;font-weight:400;font-style:italic;color:var(--minio)}
-.verso{position:relative;margin:0;padding-left:3rem;line-height:2.15rem;border-bottom:1px solid rgba(120,100,60,.28);font-size:1.12rem}
-.num{position:absolute;left:0;width:2.2rem;text-align:right;color:var(--lapis);font-size:.8rem;font-style:italic}
-.pie-folio{display:flex;justify-content:space-between;margin-top:1.2rem;padding-left:3rem}
-.pie-folio button{background:none;border:0;padding:.2rem 0;cursor:pointer;color:var(--ink-soft);font-style:italic}
-.pie-folio button:hover:not(:disabled){color:var(--minio)}
-.pie-folio button:disabled{opacity:.3;cursor:default}
+/* estante */
+.estante{list-style:none;margin:2rem auto 0;padding:0 1.25rem;max-width:62rem;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.4rem 1.7rem}
+.codice{display:block;text-decoration:none;color:inherit;border-radius:8px;outline-offset:8px}
+.codice:focus-visible{outline:2px solid #e9b84a}
+.tapa{position:relative;aspect-ratio:4/5;border-radius:3px 10px 10px 3px;padding:.8rem .8rem .8rem 1.45rem;
+  background:linear-gradient(135deg,#76241b 0%,#531810 55%,#3c100b 100%);
+  box-shadow:inset 0 0 0 2px #0007,inset 0 0 0 7px #7e2d22,inset 0 0 0 8px #d9b24c99,0 26px 38px -16px #000d,0 2px 0 #0008;
+  transition:transform .28s ease,box-shadow .28s ease;transform-origin:left center}
+.tapa::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1rem;border-radius:3px 0 0 3px;
+  background:linear-gradient(90deg,#1f0907,#4a130d 55%,#5e1a12);box-shadow:inset -2px 0 0 #0005}
+.tapa::after{content:"";position:absolute;left:.46rem;top:.8rem;bottom:.8rem;width:2px;
+  background:repeating-linear-gradient(180deg,#d9b24c88 0 6px,#0000 6px 14px)}
+.codice:hover .tapa,.codice:focus-visible .tapa{transform:translateY(-8px) rotateY(-9deg);
+  box-shadow:inset 0 0 0 2px #0007,inset 0 0 0 7px #7e2d22,inset 0 0 0 8px #d9b24c,0 36px 46px -16px #000,0 0 38px -6px #d9b24c55}
+.mini{position:absolute;inset:.8rem .8rem .8rem 1.45rem;display:flex;align-items:center;justify-content:center}
+.mini svg{width:100%;height:100%;display:block}
+.mini img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;border:2px solid #d9b24c;box-shadow:0 5px 16px #000a}
 
-.w{cursor:pointer;border-radius:2px}
-.w.v{text-decoration:underline;text-decoration-color:var(--lapis);text-decoration-thickness:2px;text-underline-offset:.2em}
-.w:hover{background:rgba(163,40,29,.14)}
-.w.sel{background:var(--minio);color:var(--vell);text-decoration-color:var(--vell)}
+.rotulo{padding:.9rem .1rem 0;text-align:center}
+.rotulo .genero{margin:0;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--desk-soft)}
+.rotulo h2{margin:.15rem 0 0;font-size:1.2rem;line-height:1.2;font-weight:400;font-style:italic;color:#f3e7c8}
+.rotulo .codice-sig{margin:.2rem 0 0;font-size:.76rem;letter-spacing:.03em;color:var(--oro)}
+.rotulo .autor{margin:.15rem 0 0;font-size:.82rem;color:var(--desk-soft)}
+.rotulo .desc{margin:.5rem 0 0;font-size:.84rem;line-height:1.45;color:var(--desk-ink);opacity:.9}
+.rotulo .cifras{margin:.5rem 0 0;font-size:.74rem;font-style:italic;color:var(--desk-soft)}
+.rotulo .abrir{display:inline-block;margin-top:.7rem;padding:.3rem .8rem;border:1px solid #8a7648;border-radius:3px;font-size:.82rem;letter-spacing:.02em;transition:background .2s,border-color .2s,color .2s}
+.codice:hover .abrir,.codice:focus-visible .abrir{background:var(--oro);border-color:var(--oro);color:#2b2119}
 
-/* la glosa: el margen de la hoja */
-.glosa{border-left:4px double var(--rule);background:linear-gradient(90deg,#0000,#0000)}
-.glosa-in{position:sticky;top:0;max-height:100vh;overflow:auto;padding:1.4rem 1.3rem 2rem}
-.glosa-cerrar{display:none}
-.pal{margin:0;font-size:2rem;line-height:1.2;font-style:italic;font-weight:400;color:var(--minio);overflow-wrap:anywhere}
-.donde{margin:.1rem 0 .6rem;font-size:.9rem;color:var(--ink-soft)}
-.estado{font-size:.95rem;font-style:italic;margin:0 0 .4rem}
-.lema{border-top:1px solid var(--rule);margin-top:1rem;padding-top:.2rem}
-.lema h3{margin:.7rem 0 .1rem;font-size:1.3rem;font-weight:700;overflow-wrap:anywhere}
-.pos{margin:0 0 .5rem;font-size:.9rem;font-style:italic;color:var(--lapis)}
-dl.datos{display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;margin:0;font-size:.95rem;line-height:1.45}
-dl.datos dt{color:var(--ink-soft);font-style:italic}
-dl.datos dd{margin:0;overflow-wrap:anywhere}
-.nota{font-size:.85rem;color:var(--ink-soft);margin:.5rem 0 0}
-.evo{margin:.8rem 0 0;padding:.6rem .8rem;border-left:3px solid var(--minio);background:rgba(163,40,29,.07);font-size:.95rem}
-.evo.vacio{border-left-color:var(--rule);background:none;font-style:italic;color:var(--ink-soft)}
-.evo ol{list-style:none;margin:.2rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem .5rem}
-.evo li+li::before{content:"→";margin-right:.5rem;color:var(--minio)}
-.evo li small{display:block;color:var(--ink-soft);font-style:italic}
-.enlace{display:inline-block;margin-top:.7rem;font-size:.95rem;color:var(--lapis)}
-.vacia p{margin:.6rem 0}
-.resultados{list-style:none;margin:.8rem 0 0;padding:0}
-.resultados li{border-top:1px solid var(--rule)}
-.resultados button{display:block;width:100%;text-align:left;background:none;border:0;padding:.55rem .1rem;cursor:pointer;font-size:.95rem;line-height:1.4}
-.resultados button:hover{background:rgba(163,40,29,.08)}
-.resultados .ref{display:block;font-style:italic;color:var(--ink-soft);font-size:.85rem}
-.resultados mark{background:none;color:var(--minio);font-weight:700}
+.pie{max-width:46rem;margin:4rem auto 0;padding:0 1.25rem 3rem;text-align:center;font-size:.88rem;line-height:1.55;color:var(--desk-soft)}
+.pie p{margin:.4rem 0}
+noscript p{text-align:center;color:var(--desk-soft)}
 
-.pie{max-width:72rem;margin:0 auto;padding:0 1.25rem 3rem;font-size:.88rem;line-height:1.5;color:var(--desk-soft)}
-.pie p{margin:.4rem 0;max-width:60rem}
-
-@media (max-width:860px){
-  body{font-size:18px}
-  .hoja{grid-template-columns:1fr;border-radius:0}
-  .verso{font-size:1.05rem;padding-left:2.4rem}
-  .num{width:1.9rem}
-  .top input{width:9.5rem}
-  .glosa{position:fixed;left:0;right:0;bottom:0;z-index:5;border-left:0;border-top:4px double var(--minio);background:var(--vell2);max-height:58vh;transform:translateY(105%);transition:transform .2s ease;box-shadow:0 -12px 30px #0006}
-  .glosa.abierta{transform:none}
-  .glosa-in{position:static;max-height:58vh;padding-top:1rem}
-  .glosa-cerrar{display:block;position:absolute;top:.4rem;right:.6rem;background:none;border:0;font-size:1.6rem;line-height:1;padding:.2rem .5rem;cursor:pointer;color:var(--ink-soft)}
-  .pie{padding-bottom:62vh}
+@media (max-width:900px){.estante{grid-template-columns:repeat(2,minmax(0,1fr));gap:2.4rem 1.4rem;max-width:36rem}}
+@media (max-width:420px){
+  .portada{padding-top:2.2rem}
+  .estante{grid-template-columns:minmax(0,17rem);justify-content:center}
 }
-@media (prefers-reduced-motion:reduce){.glosa{transition:none}}
+@media (prefers-reduced-motion:reduce){.tapa,.abrir{transition:none}.codice:hover .tapa,.codice:focus-visible .tapa{transform:none}}
 </style>
 </head>
 <body>
-<header class="top">
-  <h1><a href="../">Hispanicus</a><span id="obraTit"></span></h1>
-  <div class="ctl">
-    <a class="volver" href="../" title="Elegir otra transcripción">‹ Transcripciones</a>
-    <button id="ant" type="button" aria-label="Folio anterior">‹</button>
-    <select id="selFolio" aria-label="Ir a un folio"></select>
-    <button id="sig" type="button" aria-label="Folio siguiente">›</button>
-    <input id="q" type="search" placeholder="Buscar una palabra" aria-label="Buscar una forma o un lema" autocomplete="off">
-  </div>
+<header class="portada">
+  <p class="sobre">Léxico y evolución del español medieval</p>
+  <h1>Hispanicus</h1>
+  <p class="bajada">Elegí una transcripción paleográfica. Tocá una palabra del texto y mirá su lema, sus formas, desde cuándo se documenta y de dónde puede venir.</p>
+  <div class="filete" aria-hidden="true">❦</div>
 </header>
 
-<main class="hoja">
-  <section class="texto" id="texto" aria-label="Texto"></section>
-  <aside class="glosa" id="glosa" aria-live="polite" aria-label="Glosa de la palabra elegida">
-    <button class="glosa-cerrar" id="cerrar" type="button" aria-label="Cerrar la glosa">×</button>
-    <div class="glosa-in" id="glosaIn"></div>
-  </aside>
+<main>
+  <ul class="estante" id="estante" aria-label="Transcripciones disponibles"></ul>
+  <noscript><p>Para ver las transcripciones hace falta activar JavaScript.</p></noscript>
 </main>
 
 <footer class="pie">
-  <p id="fuenteObra"></p>
-  <p>Léxico: Diccionario del Español Medieval electrónico, Universidad de Rostock (<a href="https://doi.org/10.18453/rosdok_id00005462">doi:10.18453/rosdok_id00005462</a>). Texto y léxico con licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a>. Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0).</p>
-  <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos. El DEMel reúne textos medievales: el «último registro» es la fecha más tardía que figura en su corpus, no indica que la palabra haya dejado de usarse.</p>
+  <p>Textos y léxico: Diccionario del Español Medieval electrónico (DEMel), Universidad de Rostock, licencia <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es">CC BY-SA 4.0</a> (<a href="https://doi.org/10.18453/rosdok_id00005463">textos</a>, <a href="https://doi.org/10.18453/rosdok_id00005462">léxico</a>). Étimos propuestos: <a href="https://es.wiktionary.org/">Wikcionario en español</a> (CC BY-SA 4.0).</p>
 </footer>
 
-<script src="data/evolucion.js?v=5"></script>
+<script src="web/data/obras.js?v=4"></script>
 <script>
 (function(){
 "use strict";
-var OBRA=((location.search.match(/[?&]obra=([a-z0-9_-]+)/i)||[])[1]||"cid").toLowerCase();
-function fallo(){
-  document.title="Hispanicus";
-  document.getElementById("texto").innerHTML='<p class="estado">No se encontró esa transcripción. <a href="../">Volver a la biblioteca</a>.</p>';
-}
-var sc=document.createElement("script");
-sc.src="data/"+encodeURIComponent(OBRA)+".js?v=5";
-sc.onload=function(){var d=window.HYS_DATA&&window.HYS_DATA[OBRA];if(d)iniciar(d);else fallo();};
-sc.onerror=fallo;
-document.head.appendChild(sc);
 
-function iniciar(D){
-var EVO=window.HYS_EVO||{};
-var F=D.folios, LM=D.lemmas, M=D.meta||{};
-document.title="Hispanicus: "+M.obra;
-document.getElementById("obraTit").textContent=M.obra+(M.codice?" · "+M.codice:"");
-document.getElementById("fuenteObra").innerHTML=M.fuente_html||"";
-document.getElementById("metaDesc").setAttribute("content","Lector de "+M.obra+" con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.");
-var hayV=F.some(function(f){return f.lines.some(function(l){return l.some(function(t){return t.v;});});});
-var LET="a-záéíóúñçüſ";
-var reParts=new RegExp("^([^"+LET+"]*)(.*?)([^"+LET+"]*)$","i");
-var reLet=new RegExp("["+LET+"]","i");
-var POS={subst_m:"sustantivo masculino",subst_f:"sustantivo femenino",subst_all:"sustantivo",verb:"verbo",verb_prnl:"verbo pronominal",verb_all:"verbo",adj:"adjetivo",adv:"adverbio",art:"artículo",conj:"conjunción",interj:"interjección",prep:"preposición",pron:"pronombre",part:"participio",ger:"gerundio",name_topo:"topónimo",name_anthropo:"antropónimo",name_all:"nombre propio",name_other:"otro nombre propio",subst_mf:"sustantivo masculino y femenino"};
-
-var $=function(id){return document.getElementById(id)};
-var texto=$("texto"), glosa=$("glosa"), gin=$("glosaIn"), selF=$("selFolio"), q=$("q");
-var offs=[],acc=0; F.forEach(function(f){offs.push(acc);acc+=f.lines.length;});
-var cur=0, selEl=null;
-
-function fold(s){return s.replace(/v/g,"u").replace(/j/g,"i").replace(/y/g,"i").replace(/ç/g,"z").replace(/ſ/g,"s").replace(/ph/g,"f");}
-function core(s){return (s.toLowerCase().match(new RegExp("["+LET+"]","g"))||[]).join("");}
-function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
-function rango(f){if(!f||f[0]==null)return "sin fecha";return f[0]===f[1]?String(f[0]):f[0]+"–"+f[1];}
-function posTxt(c){
-  var ks=(c||[]).filter(function(k){
-    if(!/_all$/.test(k))return true;
-    var fam=k.split("_")[0];
-    return !(c||[]).some(function(o){return o!==k&&o.split("_")[0]===fam&&!/_all$/.test(o);});
-  });
-  var out=[];ks.forEach(function(k){var t=POS[k]||k;if(out.indexOf(t)<0)out.push(t);});return out.join(", ");
+/* ---------- ilustraciones (dibujos originales; cada una va dentro de un arco románico) ---------- */
+var ARCO="M12 292V118A108 108 0 0 1 228 118V292Z";
+function marco(id,fondo,escena,etiqueta){
+  return '<svg viewBox="0 0 240 300" role="img" aria-label="'+etiqueta+'" xmlns="http://www.w3.org/2000/svg">'+
+    '<defs><clipPath id="'+id+'"><path d="'+ARCO+'"/></clipPath>'+fondo+'</defs>'+
+    '<g clip-path="url(#'+id+')">'+escena+'</g>'+
+    '<path d="'+ARCO+'" fill="none" stroke="#d9b24c" stroke-width="3.2"/>'+
+    '<path d="M18 288V118A102 102 0 0 1 222 118V288Z" fill="none" stroke="#7e2d22" stroke-width="1.4"/></svg>';
 }
 
-/* ---------- folios ---------- */
-function showFolio(i,focus){
-  cur=Math.max(0,Math.min(F.length-1,i)); selEl=null;
-  var f=F[cur]; texto.textContent="";
-  texto.appendChild(el("h2","folio","fol. "+f.n));
-  f.lines.forEach(function(line,vi){
-    var p=el("p","verso"), n=offs[cur]+vi+1;
-    p.appendChild(el("span","num",n%5===0?String(n):""));
-    line.forEach(function(tok,ti){
-      if(reLet.test(tok.w)){
-        var m=tok.w.match(reParts);
-        if(m[1])p.appendChild(document.createTextNode(m[1]));
-        var s=el("span","w"+(tok.v?" v":""),m[2]);
-        s.tabIndex=0; s.setAttribute("role","button");
-        s.dataset.v=vi; s.dataset.t=ti;
-        p.appendChild(s);
-        if(m[3])p.appendChild(document.createTextNode(m[3]));
-      }else p.appendChild(document.createTextNode(tok.w));
-      p.appendChild(document.createTextNode(" "));
-    });
-    texto.appendChild(p);
-  });
-  var pie=el("div","pie-folio");
-  var b1=el("button",null,"‹ folio anterior"), b2=el("button",null,"folio siguiente ›");
-  b1.type=b2.type="button"; b1.disabled=cur===0; b2.disabled=cur===F.length-1;
-  b1.onclick=function(){go(cur-1)}; b2.onclick=function(){go(cur+1)};
-  pie.appendChild(b1);pie.appendChild(b2);texto.appendChild(pie);
-  selF.value=String(cur); $("ant").disabled=cur===0; $("sig").disabled=cur===F.length-1;
-  try{history.replaceState(null,"","#fol="+f.n);}catch(e){}
-  if(focus){var t=texto.querySelector('.w[data-v="'+focus.v+'"][data-t="'+focus.t+'"]');if(t){pick(t);t.scrollIntoView({block:"center"});}}
+function cidSVG(){
+  var fondo='<linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f2f63"/><stop offset=".55" stop-color="#8d3d3a"/><stop offset="1" stop-color="#dc8a3c"/></linearGradient>'+
+    '<radialGradient id="cg"><stop offset="0" stop-color="#ffe9a3" stop-opacity=".95"/><stop offset="1" stop-color="#ffe9a3" stop-opacity="0"/></radialGradient>';
+  var e='<rect width="240" height="300" fill="url(#cs)"/>'+
+    '<circle cx="118" cy="206" r="66" fill="url(#cg)"/><circle cx="118" cy="206" r="25" fill="#f4d170"/>'+
+    '<path d="M0 236C40 216 72 223 106 233C142 243 182 214 240 229V300H0Z" fill="#3b2a2e"/>'+
+    '<path d="M0 263C50 247 100 263 150 253C190 245 216 253 240 249V300H0Z" fill="#241a1d"/>'+
+    /* castillo */
+    '<g fill="#1f1618"><rect x="20" y="186" width="48" height="74"/>'+
+      '<rect x="20" y="178" width="9" height="9"/><rect x="33" y="178" width="9" height="9"/><rect x="46" y="178" width="9" height="9"/><rect x="59" y="178" width="9" height="9"/>'+
+      '<rect x="70" y="212" width="36" height="48"/>'+
+      '<rect x="70" y="204" width="9" height="9"/><rect x="83" y="204" width="9" height="9"/><rect x="96" y="204" width="10" height="9"/></g>'+
+    '<g fill="#f4d170"><rect x="41" y="202" width="5" height="14" rx="2.5"/><rect x="83" y="226" width="5" height="12" rx="2.5"/></g>'+
+    '<path d="M36 260V246A8 8 0 0 1 52 246V260Z" fill="#0d0809"/>'+
+    /* espada */
+    '<g transform="translate(152 0)">'+
+      '<polygon points="0,50 8,66 8,207 -8,207 -8,66" fill="#ebe7d8"/><rect x="-1.2" y="66" width="2.4" height="138" fill="#b8b3a0"/>'+
+      '<rect x="-31" y="206" width="62" height="10" rx="5" fill="#d9b24c"/><circle cx="-31" cy="211" r="5.5" fill="#d9b24c"/><circle cx="31" cy="211" r="5.5" fill="#d9b24c"/>'+
+      '<rect x="-4.5" y="216" width="9" height="36" fill="#7e2d22"/><rect x="-4.5" y="224" width="9" height="2" fill="#d9b24c"/><rect x="-4.5" y="236" width="9" height="2" fill="#d9b24c"/>'+
+      '<circle cx="0" cy="258" r="8.5" fill="#d9b24c"/></g>'+
+    /* lanza y pendón */
+    '<line x1="206" y1="96" x2="206" y2="264" stroke="#3a2a1a" stroke-width="3"/>'+
+    '<polygon points="206,86 201.5,99 210.5,99" fill="#ebe7d8"/>'+
+    '<path d="M206 102L238 111L228 121L238 131L206 140Z" fill="#a3281d"/><circle cx="216" cy="121" r="3.4" fill="#d9b24c"/>';
+  return marco("cc",fondo,e,"Ilustración original: un castillo, una espada y un pendón al atardecer");
 }
-function go(i){showFolio(i);window.scrollTo({top:0});if(glosa.classList.contains("abierta")&&innerWidth<=860)glosa.classList.remove("abierta");}
 
-/* ---------- glosa ---------- */
-function vacia(){
-  gin.textContent="";
-  var d=el("div","vacia");
-  d.appendChild(el("p","estado","Tocá una palabra del texto para ver su lema, sus formas documentadas y desde cuándo se registra."));
-  d.appendChild(el("p","nota",hayV?"Las palabras subrayadas en azul están anotadas por el DEMel en este pasaje, así que su lema es seguro. En las demás, la glosa propone los lemas posibles según la grafía.":"El DEMel no anota palabras de este texto: la glosa propone los lemas según la grafía y la frecuencia, y puede equivocarse."));
-  gin.appendChild(d);
-}
-function lemaBloque(lid){
-  var L=LM[lid]; if(!L)return null;
-  var b=el("section","lema");
-  b.appendChild(el("h3",null,L.n));
-  var pt=posTxt(L.c); if(pt)b.appendChild(el("p","pos",pt));
-  var dl=el("dl","datos");
-  function row(k,v){dl.appendChild(el("dt",null,k));dl.appendChild(el("dd",null,v));}
-  if(L.fm&&L.fm.length)row("Formas",L.fm.join(", "));
-  if(L.f&&L.f[0]!=null)row("Primera documentación",rango(L.f)+(L.f[2]?", en "+L.f[2]:""));
-  if(L.u!=null)row("Último registro en el DEMel",L.u?String(L.u):"sin dato");
-  row("En el DEMel",L.d+" documentaciones en "+L.s+(L.s===1?" fuente":" fuentes"));
-  if(!L.x)b.appendChild(dl);
-  var ev=EVO[lid]||EVO[L.n], box;
-  if(ev&&ev.cadena&&ev.cadena.length){
-    box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen etimológico posible"));
-    var ol=el("ol");
-    ev.cadena.forEach(function(e){var li=el("li",null,e.forma);if(e.etapa)li.appendChild(el("small",null,e.etapa));ol.appendChild(li);});
-    box.appendChild(ol);
-    if(ev.cambios&&ev.cambios.length)box.appendChild(el("p","nota","Cambios: "+ev.cambios.join("; ")));
-    if(ev.marca)box.appendChild(el("p","nota","Tipo: "+ev.marca));
-    if(ev.estado==="verificado"&&ev.fuentes&&ev.fuentes.length)box.appendChild(el("p","nota","Fuentes: "+ev.fuentes.join("; ")));
-    if(ev.nota)box.appendChild(el("p","nota",ev.nota));
-  }else{
-    box=el("div","evo vacio","La evolución de esta palabra todavía no está en la tabla curada.");
+function oriaSVG(){
+  var fondo='<linearGradient id="os" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e1737"/><stop offset="1" stop-color="#2d4c93"/></linearGradient>'+
+    '<radialGradient id="og"><stop offset="0" stop-color="#ffe9a3" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd978" stop-opacity=".35"/><stop offset="1" stop-color="#ffd978" stop-opacity="0"/></radialGradient>';
+  var estrellas=[[40,70,1.6],[62,38,1.2],[86,26,1.4],[152,22,1.2],[176,38,1.5],[198,78,1.2],[46,120,1.2],[188,124,1.4],[100,52,1],[140,58,1],[212,152,1.2],[30,164,1.2],[170,96,1],[70,92,1]];
+  var s=estrellas.map(function(a){return '<circle cx="'+a[0]+'" cy="'+a[1]+'" r="'+a[2]+'" fill="#fff3c4"/>';}).join("");
+  var peldaños="";
+  for(var i=0;i<12;i++){
+    var y=250-i*12.4, t=(256-y)/(256-104);
+    peldaños+='<line x1="'+(112+2*t).toFixed(1)+'" y1="'+y.toFixed(1)+'" x2="'+(128-2*t).toFixed(1)+'" y2="'+y.toFixed(1)+'"/>';
   }
-  b.appendChild(box);
-  var a=el("a","enlace","Ver el lema en el DEMel");
-  a.href="https://purl.uni-rostock.de/demel/"+lid; a.target="_blank"; a.rel="noopener";
-  if(!L.x)b.appendChild(a);else b.appendChild(el("p","nota","Este lema no figura en el DEMel, por eso no hay formas ni fechas."));
-  return b;
-}
-function glosar(vi,ti){
-  var tok=F[cur].lines[vi][ti], m=tok.w.match(reParts);
-  gin.textContent="";
-  gin.appendChild(el("h2","pal",m[2]));
-  gin.appendChild(el("p","donde","fol. "+F[cur].n+", verso "+(offs[cur]+vi+1)));
-  var est;
-  if(tok.v)est="El DEMel anota esta palabra en este pasaje.";
-  else if(tok.ad)est="Adverbio en -mientre: el texto lo escribe en dos palabras, pero se lee como una sola unidad (forma antigua de -mente). Como conjunción, «mientre» va solo.";
-  else if(tok.x===1)est="Lema fijado a mano en la tabla de lemas.";
-  else if(tok.x===2)est="Lema propuesto en la tabla de lemas, todavía sin revisar.";
-  else if(tok.g)est="El DEMel no documenta esta forma como una sola palabra. Se separó en «"+tok.g.join("» + «")+"»; la separación puede ser incorrecta.";
-  else if(tok.d)est="Había varios lemas posibles para esta forma. Se muestra el más documentado en el DEMel.";
-  else if(tok.m)est="El DEMel no documenta esta forma. El lema se dedujo por la terminación y puede ser incorrecto.";
-  else if(tok.l&&tok.l.length>1)est="Lemas posibles según la grafía. El DEMel no anota esta palabra en este pasaje.";
-  else if(tok.l)est="Lema probable según la grafía. El DEMel no anota esta palabra en este pasaje.";
-  else est="El DEMel no tiene un lema para esta forma. Puede ser un nombre propio, una forma pegada (como «enel») o una forma no documentada.";
-  gin.appendChild(el("p","estado",est));
-  (tok.l||[]).forEach(function(lid){var b=lemaBloque(lid);if(b)gin.appendChild(b);});
-  gin.scrollTop=0;
-  if(innerWidth<=860)glosa.classList.add("abierta");
-}
-function pick(span){
-  if(selEl)selEl.classList.remove("sel");
-  selEl=span; span.classList.add("sel");
-  glosar(+span.dataset.v,+span.dataset.t);
-}
-
-/* ---------- búsqueda ---------- */
-var idx=null, lemKey={};
-function keysOf(lid){
-  if(lemKey[lid])return lemKey[lid];
-  var L=LM[lid]; var ks=[];
-  if(L)L.n.toLowerCase().split(" / ").forEach(function(p){
-    var c=p.replace(/\(se\)|[\[\]\d]/g,"").replace(/,\s*(a|as)\b/g,"").trim();
-    if(c)ks.push(fold(c));
-  });
-  return (lemKey[lid]=ks);
-}
-function buildIdx(){
-  idx=[];
-  F.forEach(function(f,fi){f.lines.forEach(function(line,vi){line.forEach(function(tok,ti){
-    if(!reLet.test(tok.w))return;
-    var forma=fold(core(tok.w)), lem=[];
-    if(tok.l&&(tok.v||tok.m||tok.x||tok.g||tok.d||tok.l.length===1))tok.l.forEach(function(l){keysOf(l).forEach(function(k){lem.push(k);});});
-    idx.push([fi,vi,ti,forma,lem]);
-  });});});
-}
-function buscar(txt){
-  var key=fold(core(txt.trim()));
-  if(!key){vacia();return;}
-  if(!idx)buildIdx();
-  var res=idx.filter(function(r){return r[3]===key||r[4].indexOf(key)>=0;});
-  gin.textContent="";
-  gin.appendChild(el("h2","pal","«"+txt.trim()+"»"));
-  if(!res.length){
-    gin.appendChild(el("p","estado","No hay resultados. Probá con otra grafía (u/v, i/j, ç/z) o con el lema."));
-    if(innerWidth<=860)glosa.classList.add("abierta");
-    return;
+  function virgen(x,tunica){
+    return '<circle cx="'+x+'" cy="82" r="10" fill="#ffe9a3" opacity=".9"/><circle cx="'+x+'" cy="82" r="10" fill="none" stroke="#d9b24c" stroke-width="1.4"/>'+
+      '<circle cx="'+x+'" cy="82" r="5.4" fill="#f1d9b5"/>'+
+      '<path d="M'+(x-10)+' 112L'+(x-5.5)+' 90H'+(x+5.5)+'L'+(x+10)+' 112Z" fill="'+tunica+'"/>';
   }
-  gin.appendChild(el("p","estado",res.length+(res.length===1?" aparición":" apariciones")+(res.length>100?" (se muestran las primeras 100)":"")+"."));
-  var ul=el("ul","resultados");
-  res.slice(0,100).forEach(function(r){
-    var li=el("li"), b=el("button"); b.type="button";
-    b.appendChild(el("span","ref","fol. "+F[r[0]].n+", verso "+(offs[r[0]]+r[1]+1)));
-    var line=F[r[0]].lines[r[1]];
-    line.forEach(function(t,k){
-      if(k===r[2]){b.appendChild(el("mark",null,t.w));}else b.appendChild(document.createTextNode(t.w));
-      b.appendChild(document.createTextNode(" "));
-    });
-    b.onclick=function(){showFolio(r[0],{v:r[1],t:r[2]});};
-    li.appendChild(b);ul.appendChild(li);
-  });
-  gin.appendChild(ul);
-  if(innerWidth<=860)glosa.classList.add("abierta");
+  var e='<rect width="240" height="300" fill="url(#os)"/>'+s+
+    '<circle cx="192" cy="68" r="11" fill="#f4ecd0"/><circle cx="197" cy="64" r="10" fill="#1a2a5e"/>'+
+    '<circle cx="120" cy="92" r="74" fill="url(#og)"/>'+
+    '<ellipse cx="120" cy="114" rx="62" ry="7" fill="#fff3c4" opacity=".22"/>'+
+    virgen(86,"#a3281d")+virgen(120,"#e8e0cc")+virgen(154,"#4a6cc0")+
+    '<g stroke="#e6c25a" stroke-width="2.2" stroke-linecap="round"><line x1="112" y1="256" x2="114" y2="104"/><line x1="128" y1="256" x2="126" y2="104"/></g>'+
+    '<g stroke="#e6c25a" stroke-width="1.8" stroke-linecap="round">'+peldaños+'</g>'+
+    '<path d="M0 262C48 248 96 262 150 254C196 247 220 254 240 252V300H0Z" fill="#141018"/>'+
+    '<polygon points="76,244 120,214 164,244" fill="#2b2220"/><rect x="84" y="242" width="72" height="44" fill="#3d312c"/>'+
+    '<path d="M109 286V262A11 11 0 0 1 131 262V286Z" fill="#ffd978"/><path d="M112 286V264A8 8 0 0 1 128 264V286Z" fill="#fff0b8"/>';
+  return marco("co",fondo,e,"Ilustración original: una celda con una escalera de luz que sube a un cielo estrellado");
 }
 
-/* ---------- eventos ---------- */
-F.forEach(function(f,i){var o=document.createElement("option");o.value=String(i);o.textContent="fol. "+f.n;selF.appendChild(o);});
-selF.onchange=function(){go(+selF.value)};
-$("ant").onclick=function(){go(cur-1)}; $("sig").onclick=function(){go(cur+1)};
-$("cerrar").onclick=function(){glosa.classList.remove("abierta")};
-q.addEventListener("input",function(){var v=q.value;if(!v.trim())vacia();else buscar(v);});
-q.addEventListener("keydown",function(e){if(e.key==="Escape"){q.value="";vacia();}});
-texto.addEventListener("click",function(e){var w=e.target.closest(".w");if(w)pick(w);});
-texto.addEventListener("keydown",function(e){
-  var w=e.target.closest&&e.target.closest(".w");
-  if(w&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick(w);}
-});
-document.addEventListener("keydown",function(e){
-  if(e.target.tagName==="INPUT"||e.target.tagName==="SELECT"||e.altKey||e.ctrlKey||e.metaKey)return;
-  if(e.key==="ArrowLeft")go(cur-1); else if(e.key==="ArrowRight")go(cur+1);
-});
 
-/* ---------- inicio ---------- */
-var h=(location.hash.match(/fol=([0-9]+[rv])/)||[])[1], start=0;
-if(h){F.forEach(function(f,i){if(f.n===h)start=i;});}
-showFolio(start); vacia();
+function reyesSVG(){
+  var fondo='<linearGradient id="rs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1b3f"/><stop offset=".6" stop-color="#1e5c7a"/><stop offset="1" stop-color="#e0a85a"/></linearGradient>'+
+    '<radialGradient id="rg"><stop offset="0" stop-color="#fff2b8" stop-opacity=".95"/><stop offset="1" stop-color="#fff2b8" stop-opacity="0"/></radialGradient>';
+  var rayos="";
+  for(var i=0;i<8;i++){
+    var a=i*Math.PI/4, r=i%2?26:46, b=Math.PI/16;
+    rayos+='<polygon points="120,70 '+(120+Math.cos(a-b)*9).toFixed(1)+','+(70+Math.sin(a-b)*9).toFixed(1)+' '+(120+Math.cos(a)*r).toFixed(1)+','+(70+Math.sin(a)*r).toFixed(1)+' '+(120+Math.cos(a+b)*9).toFixed(1)+','+(70+Math.sin(a+b)*9).toFixed(1)+'" fill="#fff0a8"/>';
+  }
+  function corona(x,y,c){
+    return '<g transform="translate('+x+' '+y+')"><path d="M-17 0L-20-20L-9-9L0-24L9-9L20-20L17 0Z" fill="'+c+'"/><rect x="-17" y="0" width="34" height="7" rx="2" fill="'+c+'"/><rect x="-17" y="2" width="34" height="2" fill="#7e2d22" opacity=".45"/>'+
+      '<circle cx="-20" cy="-21" r="2.6" fill="#fff2b8"/><circle cx="0" cy="-25" r="2.6" fill="#fff2b8"/><circle cx="20" cy="-21" r="2.6" fill="#fff2b8"/></g>';
+  }
+  var e='<rect width="240" height="300" fill="url(#rs)"/>'+
+    [[40,30],[70,60],[180,36],[206,80],[28,100],[210,130],[56,150],[170,150]].map(function(a){return '<circle cx="'+a[0]+'" cy="'+a[1]+'" r="1.4" fill="#fff3c4"/>';}).join("")+
+    '<circle cx="120" cy="70" r="62" fill="url(#rg)"/>'+rayos+'<circle cx="120" cy="70" r="7" fill="#fffbe0"/>'+
+    '<line x1="120" y1="86" x2="120" y2="150" stroke="#fff2b8" stroke-width="1.4" stroke-dasharray="2 5" opacity=".7"/>'+
+    corona(62,176,"#d9b24c")+corona(120,150,"#ecc866")+corona(178,176,"#d9b24c")+
+    '<path d="M0 236C40 214 82 226 120 232C160 238 200 212 240 226V300H0Z" fill="#8a5a33"/>'+
+    '<path d="M0 262C60 246 110 264 164 252C200 245 222 252 240 250V300H0Z" fill="#5d3a22"/>'+
+    '<g fill="#2a1a12"><path d="M30 262C34 244 44 240 52 246C58 236 70 238 72 252L72 262Z"/><rect x="66" y="232" width="4" height="22"/><circle cx="68" cy="230" r="4"/></g>';
+  return marco("cr",fondo,e,"Ilustración original: una estrella de ocho puntas sobre tres coronas y un desierto");
 }
+
+function millanSVG(){
+  var fondo='<linearGradient id="ms" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a4a6e"/><stop offset=".55" stop-color="#e9c47d"/><stop offset="1" stop-color="#efd9a0"/></linearGradient>';
+  var e='<rect width="240" height="300" fill="url(#ms)"/>'+
+    '<circle cx="172" cy="128" r="22" fill="#fff0b0"/><circle cx="172" cy="128" r="34" fill="#fff0b0" opacity=".25"/>'+
+    '<path d="M-10 214L58 120L98 168L148 98L250 224V310H-10Z" fill="#6c7a5a"/>'+
+    '<path d="M148 98L170 128L156 124L146 138L136 122L124 130Z" fill="#f3ead2" opacity=".9"/>'+
+    '<path d="M-10 238L40 186L86 226L132 178L190 234L250 196V310H-10Z" fill="#4a5a3f"/>'+
+    '<path d="M-10 270C40 252 86 270 140 260C190 252 220 262 250 258V310H-10Z" fill="#2f3a2a"/>'+
+    /* ermita y cueva */
+    '<rect x="96" y="236" width="48" height="34" fill="#cdbb94"/><polygon points="90,238 120,214 150,238" fill="#8a3a2c"/>'+
+    '<path d="M110 270V252A10 10 0 0 1 130 252V270Z" fill="#3a2418"/>'+
+    '<rect x="118.5" y="198" width="3" height="18" fill="#2b2118"/><rect x="113" y="203" width="14" height="3" fill="#2b2118"/>'+
+    /* ovejas */
+    '<g fill="#f6f0dc"><ellipse cx="48" cy="268" rx="11" ry="7"/><circle cx="39" cy="265" r="4.5" fill="#2b2118"/><ellipse cx="190" cy="274" rx="11" ry="7"/><circle cx="199" cy="271" r="4.5" fill="#2b2118"/></g>'+
+    '<g stroke="#2b2118" stroke-width="2"><line x1="44" y1="274" x2="44" y2="281"/><line x1="52" y1="274" x2="52" y2="281"/><line x1="186" y1="280" x2="186" y2="287"/><line x1="194" y1="280" x2="194" y2="287"/></g>';
+  return marco("cm",fondo,e,"Ilustración original: una ermita con una cruz entre montañas, con ovejas");
+}
+
+function domingoSVG(){
+  var fondo='<linearGradient id="ds" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8d3a0"/><stop offset="1" stop-color="#b98a52"/></linearGradient>';
+  function arco(x){
+    return '<path d="M'+(x-22)+' 224V158A22 22 0 0 1 '+(x+22)+' 158V224Z" fill="#2a1d14"/>'+
+      '<path d="M'+(x-22)+' 158A22 22 0 0 1 '+(x+22)+' 158" fill="none" stroke="#f0e2b8" stroke-width="3"/>'+
+      '<rect x="'+(x-30)+'" y="150" width="8" height="74" fill="#d6bf8a"/><rect x="'+(x+22)+'" y="150" width="8" height="74" fill="#d6bf8a"/>'+
+      '<rect x="'+(x-33)+'" y="146" width="14" height="6" fill="#e8d5a3"/><rect x="'+(x+19)+'" y="146" width="14" height="6" fill="#e8d5a3"/>';
+  }
+  function eslabon(x,y,r){
+    return '<ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="14" fill="none" stroke="#3a3430" stroke-width="5" transform="rotate('+r+' '+x+' '+y+')"/>';
+  }
+  var e='<rect width="240" height="300" fill="url(#ds)"/>'+
+    '<rect x="0" y="118" width="240" height="14" fill="#8a6338" opacity=".55"/>'+
+    '<rect x="0" y="132" width="240" height="94" fill="#c9a96d"/>'+
+    arco(52)+arco(120)+arco(188)+
+    '<rect x="0" y="224" width="240" height="80" fill="#8c6a3e"/>'+
+    '<path d="M0 238C60 230 180 230 240 238V304H0Z" fill="#6f5230"/>'+
+    /* cadena rota */
+    '<g>'+eslabon(86,60,12)+eslabon(98,82,-10)+eslabon(108,102,12)+'</g>'+
+    '<g>'+eslabon(150,64,-14)+eslabon(138,86,10)+'</g>'+
+    '<g fill="#ffe28a"><polygon points="124,64 129,76 141,72 133,82 140,93 127,89 121,100 119,87 106,84 117,77 114,65 121,73"/></g>'+
+    '<path d="M70 228h100l-8 16H78Z" fill="#4b3822"/>';
+  return marco("cd",fondo,e,"Ilustración original: arcos de un claustro románico y una cadena rota");
+}
+
+function genericoSVG(titulo){
+  var ini=(titulo||"?").replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/,"").charAt(0).toUpperCase()||"?";
+  var fondo='<linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eadfc0"/><stop offset="1" stop-color="#d4c394"/></linearGradient>';
+  var e='<rect width="240" height="300" fill="url(#gs)"/>'+
+    '<g stroke="#7e2d22" stroke-width="1" opacity=".35">'+[150,170,190,210,230,250].map(function(y){return '<line x1="40" y1="'+y+'" x2="200" y2="'+y+'"/>';}).join("")+'</g>'+
+    '<rect x="62" y="60" width="86" height="86" fill="#a3281d"/><rect x="66" y="64" width="78" height="78" fill="none" stroke="#d9b24c" stroke-width="2"/>'+
+    '<text x="105" y="125" text-anchor="middle" font-family="Cardo,Georgia,serif" font-size="68" font-weight="700" fill="#f6e7b8">'+ini+'</text>';
+  return marco("cg2",fondo,e,"Ilustración: folio con una inicial decorada");
+}
+
+/* ---------- presentación de cada obra (para sumar una transcripción: agregar una entrada) ---------- */
+/* foto: ruta a una imagen propia (p. ej. "web/img/cid.jpg"); si se indica, reemplaza al dibujo */
+var P={
+  cid:{genero:"Cantar de gesta",
+       desc:"El destierro, las conquistas y la honra de Rodrigo Díaz, el Cid. Copia de 1300-1400 conservada en la Biblioteca Nacional de España.",
+       svg:cidSVG, foto:"web/img/mioCid.jpg"},
+  oria:{genero:"Poema en cuaderna vía",
+        desc:"La vida de la reclusa Oria y sus visiones, contada por Gonzalo de Berceo.",
+        svg:oriaSVG, foto:"web/img/oria.jpg"},
+  reyes:{genero:"Teatro religioso",
+         desc:"Tres reyes siguen una estrella y dudan ante Herodes: el texto teatral más antiguo que se conserva en castellano.",
+         svg:reyesSVG, foto:"web/img/ReyesMagos.jpg"},
+  millan:{genero:"Poema en cuaderna vía",
+          desc:"La vida del pastor y ermitaño riojano que llegó a santo, según Gonzalo de Berceo. Fragmento.",
+          svg:millanSVG, foto:null},
+  domingo:{genero:"Poema en cuaderna vía",
+           desc:"La vida de Domingo, abad del monasterio de Silos, sus milagros y la liberación de cautivos, según Berceo.",
+           svg:domingoSVG, foto:null}
+};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function n(x){return Number(x).toLocaleString("es-AR");}
+
+var lista=document.getElementById("estante");
+(window.HYS_OBRAS||[]).forEach(function(o){
+  var p=P[o.id]||{}, li=document.createElement("li");
+  var arte=p.foto?'<img src="'+esc(p.foto)+'" alt="Imagen de '+esc(o.titulo)+'">':(p.svg||function(){return genericoSVG(o.titulo);})();
+  li.innerHTML=
+    '<a class="codice" href="web/?obra='+encodeURIComponent(o.id)+'" aria-label="Abrir '+esc(o.titulo)+'">'+
+      '<div class="tapa"><div class="mini">'+arte+'</div></div>'+
+      '<div class="rotulo">'+
+        '<p class="genero">'+esc(p.genero||"Transcripción")+'</p>'+
+        '<h2>'+esc(o.titulo)+'</h2>'+
+        (o.codice?'<p class="codice-sig">'+esc(o.codice)+'</p>':'')+
+        '<p class="autor">'+esc(o.autor)+(o.periodo?' · '+esc(o.periodo):'')+'</p>'+
+        (p.desc?'<p class="desc">'+esc(p.desc)+'</p>':'')+
+        '<p class="cifras">'+n(o.versos)+' versos · '+n(o.folios)+' folios · '+n(o.palabras)+' palabras</p>'+
+        '<span class="abrir">Abrir la transcripción ›</span>'+
+      '</div>'+
+    '</a>';
+  lista.appendChild(li);
+});
+if(!lista.children.length){lista.innerHTML='<li><p style="text-align:center;color:#a89878">No hay transcripciones cargadas.</p></li>';}
 })();
 </script>
 </body>

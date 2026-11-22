@@ -23,6 +23,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 CSV_WIKT = RAIZ / "datos" / "evolucion_wiktionary.csv"
 XLSX = RAIZ / "datos" / "verificacion_cid.xlsx"
+CSV_GLOSAS = RAIZ / "datos" / "manual" / "glosas.csv"   # lema;significado;fuente;mostrar (mostrar = cómo se escribe el lema en el lector, p. ej. «Vivar»)
 OBRAS_JSON = sorted((RAIZ / "web" / "data").glob("*.json"))
 OBRAS_JS = [f for f in sorted((RAIZ / "web" / "data").glob("*.js")) if f.stem not in ("evolucion", "obras")]
 sys.path.insert(0, str(RAIZ / "motor"))
@@ -47,7 +48,26 @@ CABECERA = """/* Tabla de evolución. Una entrada por lema (nombre del lema como
    Cada dato verificado debe tener su fuente. Propuestas del Wikcionario en español, CC BY-SA 4.0. */
 """
 
-def cadena_de(etimo):
+NO_LATINA = re.compile(r"[\u0370-\u03FF\u1F00-\u1FFF\u0590-\u05FF\u0600-\u06FF\u0400-\u04FF]")
+
+def lectura(forma, texto):
+    """Para una forma en escritura no latina (árabe, hebreo, griego…), busca en el texto citado del
+    Wikcionario el paréntesis que la sigue: «المُصَلَّى (al-muçálla, 'el oratorio')» -> (transliteración, glosa)."""
+    if not texto or not NO_LATINA.search(forma):
+        return None, None
+    i = texto.find(forma)
+    m = re.match(r"\s*\(([^()]*)\)", texto[i + len(forma):]) if i >= 0 else None
+    if not m:
+        return None, None
+    dentro = m.group(1).strip()
+    if dentro[:1] in "'‘\"«":                      # solo glosa: «Χριστός ('ungido')»
+        return None, dentro.strip("'‘’\"«» ") or None
+    partes = [x.strip() for x in re.split(r",\s*(?=['‘\"«])", dentro, maxsplit=1)]
+    tr = partes[0] if partes[0] and not NO_LATINA.search(partes[0]) else None
+    gl = partes[1].strip("'‘’\"«» ") if len(partes) > 1 else None
+    return tr, (gl or None)
+
+def cadena_de(etimo, texto=""):
     partes = [p.strip() for p in etimo.split(" | ") if p.strip()]
     items = []
     for p in partes:
@@ -55,7 +75,13 @@ def cadena_de(etimo):
         items.append((m.group(2), m.group(1)) if m else (p, "latín"))
     if len(items) > 1:
         return [{"forma": " o ".join(f for f, _ in items), "etapa": "varios étimos posibles"}]
-    return [{"forma": items[0][0], "etapa": items[0][1]}] if items else []
+    if not items:
+        return []
+    e = {"forma": items[0][0], "etapa": items[0][1]}
+    tr, gl = lectura(e["forma"], texto)
+    if tr: e["lectura"] = tr
+    if gl: e["glosa"] = gl
+    return [e]
 
 def fuentes_wikt(texto):
     out = []
@@ -126,7 +152,7 @@ def main():
             continue
         if not fuentes:
             fuentes = ["Sin fuente indicada"]
-        e = {"cadena": cadena_de(etimo), "cambios": [], "fuentes": fuentes,
+        e = {"cadena": cadena_de(etimo, b["fuentes"] if b else ""), "cambios": [], "fuentes": fuentes,
              "estado": "verificado" if verificado else "pendiente"}
         if not verificado and derivacion_corroborada:
             marcado = h[7] if h and len(h) > 7 and h[7] else etimo
@@ -141,10 +167,28 @@ def main():
             e["nota"] = nota
         evo[lema] = e
     cuerpo = ",\n".join(" %s: %s" % (json.dumps(k, ensure_ascii=False), json.dumps(v, ensure_ascii=False)) for k, v in sorted(evo.items()))
-    SALIDA.write_text(CABECERA + "window.HYS_EVO = {\n" + cuerpo + "\n};\n", encoding="utf-8", newline="\n")
+    glosas = {}
+    if CSV_GLOSAS.exists():
+        for r in csv.DictReader(open(CSV_GLOSAS, encoding="utf-8-sig"), delimiter=";"):
+            lema, sig, fte = (r.get("lema") or "").strip(), (r.get("significado") or "").strip(), (r.get("fuente") or "").strip()
+            mos = (r.get("mostrar") or "").strip()
+            g = {}
+            if lema and sig and fte:          # sin fuente no se publica
+                g.update({"s": sig, "f": fte})
+            elif lema and sig:
+                avisos.append("Glosa de «%s» sin fuente: no se publica." % lema)
+            if lema and mos:
+                g["m"] = mos
+            if g:
+                glosas[lema] = g
+    cuerpo_g = ",\n".join(" %s: %s" % (json.dumps(k, ensure_ascii=False), json.dumps(v, ensure_ascii=False)) for k, v in sorted(glosas.items()))
+    SALIDA.write_text(CABECERA + "window.HYS_EVO = {\n" + cuerpo + "\n};\n"
+                      + "/* Significados (datos/manual/glosas.csv): lema -> {s: significado, f: fuente, m: nombre a mostrar} */\n"
+                      + "window.HYS_GLOSAS = {\n" + cuerpo_g + "\n};\n", encoding="utf-8", newline="\n")
     ver = sum(1 for v in evo.values() if v["estado"] == "verificado")
     print("evolucion.js: %d lemas con étimo (%d verificados, %d pendientes) de %d lemas de las obras" % (len(evo), ver, len(evo) - ver, len(lemas_cid)))
     print("  con cadena calculada por el motor: %d" % len(calculados))
+    print("  con significado (glosas.csv): %d" % sum(1 for g in glosas.values() if "s" in g))
     for a in avisos:
         print("AVISO:", a, file=sys.stderr)
 

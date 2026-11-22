@@ -74,6 +74,9 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 .evo ol{list-style:none;margin:.2rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem .5rem}
 .evo li+li::before{content:"→";margin-right:.5rem;color:var(--minio)}
 .evo li small{display:block;color:var(--ink-soft);font-style:italic}
+.evo li .escr{display:block;font-size:.9rem;color:var(--ink-soft);unicode-bidi:isolate;text-align:left}
+.evo li .gl{font-style:italic}
+.datos dd small.fte{display:block;font-size:.8rem;color:var(--ink-soft);font-style:italic}
 .enlace{display:inline-block;margin-top:.7rem;font-size:.95rem;color:var(--lapis)}
 .vacia p{margin:.6rem 0}
 .resultados{list-style:none;margin:.8rem 0 0;padding:0}
@@ -127,7 +130,7 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
   <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos. El DEMel reúne textos medievales: el «último registro» es la fecha más tardía que figura en su corpus, no indica que la palabra haya dejado de usarse.</p>
 </footer>
 
-<script src="data/evolucion.js?v=5"></script>
+<script src="data/evolucion.js?v=6"></script>
 <script>
 (function(){
 "use strict";
@@ -143,7 +146,7 @@ sc.onerror=fallo;
 document.head.appendChild(sc);
 
 function iniciar(D){
-var EVO=window.HYS_EVO||{};
+var EVO=window.HYS_EVO||{}, GLO=window.HYS_GLOSAS||{};
 var F=D.folios, LM=D.lemmas, M=D.meta||{};
 document.title="Hispanicus: "+M.obra;
 document.getElementById("obraTit").textContent=M.obra+(M.codice?" · "+M.codice:"");
@@ -214,13 +217,23 @@ function vacia(){
   d.appendChild(el("p","nota",hayV?"Las palabras subrayadas en azul están anotadas por el DEMel en este pasaje, así que su lema es seguro. En las demás, la glosa propone los lemas posibles según la grafía.":"El DEMel no anota palabras de este texto: la glosa propone los lemas según la grafía y la frecuencia, y puede equivocarse."));
   gin.appendChild(d);
 }
+/* Los nombres propios del DEMel van en minúscula y con número de homónimo («vivar 2»): se muestran como nombre («Vivar»). */
+function nombreVisible(L){
+  if(GLO[L.n]&&GLO[L.n].m)return GLO[L.n].m;
+  var esNombre=(L.c||[]).some(function(k){return /^name_(topo|anthropo)/.test(k);}) && !(L.c||[]).some(function(k){return /^(subst|verb|adj|adv)_/.test(k);});
+  if(!esNombre)return L.n;
+  var n=L.n.replace(/\s+\d+$/,"");
+  return n.charAt(0).toUpperCase()+n.slice(1);
+}
 function lemaBloque(lid){
   var L=LM[lid]; if(!L)return null;
   var b=el("section","lema");
-  b.appendChild(el("h3",null,L.n));
+  b.appendChild(el("h3",null,nombreVisible(L)));
   var pt=posTxt(L.c); if(pt)b.appendChild(el("p","pos",pt));
   var dl=el("dl","datos");
   function row(k,v){dl.appendChild(el("dt",null,k));dl.appendChild(el("dd",null,v));}
+  var G=GLO[L.n];
+  if(G&&G.s){row("Significado",G.s);var dd=dl.lastChild;dd.appendChild(el("small","fte",G.f));}
   if(L.fm&&L.fm.length)row("Formas",L.fm.join(", "));
   if(L.f&&L.f[0]!=null)row("Primera documentación",rango(L.f)+(L.f[2]?", en "+L.f[2]:""));
   if(L.u!=null)row("Último registro en el DEMel",L.u?String(L.u):"sin dato");
@@ -230,7 +243,13 @@ function lemaBloque(lid){
   if(ev&&ev.cadena&&ev.cadena.length){
     box=el("div","evo"); box.appendChild(el("strong",null,ev.estado==="verificado"?"Evolución":"Origen etimológico posible"));
     var ol=el("ol");
-    ev.cadena.forEach(function(e){var li=el("li",null,e.forma);if(e.etapa)li.appendChild(el("small",null,e.etapa));ol.appendChild(li);});
+    ev.cadena.forEach(function(e){
+      var li=el("li",null,e.lectura||e.forma);
+      if(e.glosa)li.appendChild(document.createTextNode(" "));
+      if(e.glosa)li.appendChild(el("span","gl","‘"+e.glosa+"’"));
+      if(e.lectura){var sc=el("span","escr",e.forma);sc.dir="auto";li.appendChild(sc);}
+      if(e.etapa)li.appendChild(el("small",null,e.etapa));
+      ol.appendChild(li);});
     box.appendChild(ol);
     if(ev.cambios&&ev.cambios.length)box.appendChild(el("p","nota","Cambios: "+ev.cambios.join("; ")));
     if(ev.marca)box.appendChild(el("p","nota","Tipo: "+ev.marca));

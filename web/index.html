@@ -94,7 +94,14 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 .facsimil{display:none;margin:0;padding:1rem .9rem;border-left:1px solid rgba(120,100,60,.35)}
 body.con-facsimil .facsimil{display:block}
 .facsimil-in{position:sticky;top:.6rem}
-.facsimil img{display:block;width:100%;max-height:calc(100vh - 4.5rem);object-fit:contain;background:#2a241c;border-radius:2px;cursor:zoom-in}
+.visor{position:relative;overflow:hidden;background:#2a241c;border-radius:2px;touch-action:pan-y}
+.visor.zoom{touch-action:none}
+.facsimil img{display:block;width:100%;max-height:calc(100vh - 4.5rem);object-fit:contain;cursor:zoom-in;transform-origin:50% 50%;transition:transform .15s ease;user-select:none;-webkit-user-drag:none}
+.visor.zoom img{cursor:zoom-out;transition:none}
+.zoom-ctl{position:absolute;right:.4rem;bottom:.4rem;display:flex;gap:.25rem;opacity:.85}
+.zoom-ctl button{width:2rem;height:2rem;border:1px solid #0006;border-radius:3px;background:#f3ead6e6;color:#3a2f22;font-size:1.05rem;line-height:1;cursor:pointer;padding:0}
+.zoom-ctl button:hover{background:#fff}
+.facsimil figcaption a{color:var(--lapis);font-style:normal;white-space:nowrap}
 .facsimil figcaption{margin-top:.4rem;font-size:.8rem;line-height:1.35;color:var(--ink-soft);font-style:italic}
 .facsimil .sin-img{padding:2rem 1rem;text-align:center;color:var(--ink-soft);font-style:italic}
 @media (min-width:1201px){
@@ -135,7 +142,7 @@ body.con-facsimil .facsimil{display:block}
 
 <main class="hoja">
   <section class="texto" id="texto" aria-label="Texto"></section>
-  <figure class="facsimil" id="facsimil" aria-label="Imagen del folio en el manuscrito"><div class="facsimil-in"><a id="facLink" target="_blank" rel="noopener"><img id="facImg" alt=""></a><figcaption id="facCap"></figcaption></div></figure>
+  <figure class="facsimil" id="facsimil" aria-label="Imagen del folio en el manuscrito"><div class="facsimil-in"><div class="visor" id="facVisor"><img id="facImg" alt="" draggable="false"><div class="zoom-ctl"><button type="button" id="zMas" aria-label="Ampliar">+</button><button type="button" id="zMenos" aria-label="Reducir">−</button><button type="button" id="zReset" aria-label="Tamaño normal">↺</button></div></div><figcaption><span id="facCap"></span> <a id="facLink" target="_blank" rel="noopener">Abrir la imagen sola</a></figcaption></div></figure>
   <aside class="glosa" id="glosa" aria-live="polite" aria-label="Glosa de la palabra elegida">
     <button class="glosa-cerrar" id="cerrar" type="button" aria-label="Cerrar la glosa">×</button>
     <div class="glosa-in" id="glosaIn"></div>
@@ -228,10 +235,31 @@ function showFolio(i,focus){
 }
 /* ---------- facsímil ---------- */
 var FAC=M.facsimil||null;
+/* zoom dentro del visor: el punto de ampliación sigue al puntero (transform-origin) */
+var Z=1, ZMAX=6, visor=$("facVisor"), fimg=$("facImg");
+function zAplicar(){fimg.style.transform=Z>1?"scale("+Z+")":"";visor.classList.toggle("zoom",Z>1);}
+function zPonerOrigen(e){var b=visor.getBoundingClientRect();
+  fimg.style.transformOrigin=(Math.max(0,Math.min(1,(e.clientX-b.left)/b.width))*100)+"% "+(Math.max(0,Math.min(1,(e.clientY-b.top)/b.height))*100)+"%";}
+function zReset(){Z=1;fimg.style.transformOrigin="50% 50%";zAplicar();}
+var zArrastre=false, zMovio=false;
+visor.addEventListener("pointerdown",function(e){if(e.target.closest(".zoom-ctl"))return;zArrastre=true;zMovio=false;});
+visor.addEventListener("pointermove",function(e){if(Z>1&&(e.pointerType==="mouse"||zArrastre)){zMovio=true;zPonerOrigen(e);}});
+visor.addEventListener("pointerup",function(e){
+  if(e.target.closest(".zoom-ctl")){zArrastre=false;return;}
+  if(!zMovio||Z===1){ if(Z>1)zReset(); else {zPonerOrigen(e);Z=2.5;zAplicar();} }
+  zArrastre=false;});
+visor.addEventListener("pointercancel",function(){zArrastre=false;});
+visor.addEventListener("wheel",function(e){
+  if(Z===1&&e.deltaY>0)return;
+  e.preventDefault(); zPonerOrigen(e);
+  Z=Math.max(1,Math.min(ZMAX,Z*(e.deltaY<0?1.2:1/1.2))); if(Z<1.05)Z=1; zAplicar();},{passive:false});
+$("zMas").onclick=function(){Z=Math.min(ZMAX,Z<1.5?2.5:Z*1.4);zAplicar();};
+$("zMenos").onclick=function(){Z=Z/1.4;if(Z<1.2)Z=1;zAplicar();};
+$("zReset").onclick=zReset;
 function facActualizar(){
   if(!FAC||!document.body.classList.contains("con-facsimil"))return;
   var n=F[cur].n, src=FAC.dir+n+".jpg", img=$("facImg");
-  img.alt="Manuscrito, fol. "+n; img.src=src; $("facLink").href=src;
+  zReset(); img.alt="Manuscrito, fol. "+n; img.src=src; $("facLink").href=src;
   img.onerror=function(){img.removeAttribute("src");$("facCap").textContent="No hay imagen para el fol. "+n+".";};
   $("facCap").textContent="Fol. "+n+". "+FAC.credito;
   if(cur+1<F.length){var pre=new Image();pre.src=FAC.dir+F[cur+1].n+".jpg";}

@@ -142,6 +142,25 @@ def construir(obra, cfg):
             out.append(t)
         return out
 
+    # --- palabras que el copista escribió separadas («en tro» = entró, «den tro» = dentro).
+    # En la tabla manual de la obra, una forma con espacio une las dos palabras en una sola unidad de lectura.
+    UNIONES = {k: v for k, v in MAN_OBRA.items() if " " in k}
+    def unir_separadas(verse):
+        out = []
+        for t in verse:
+            prev = out[-1] if out else None
+            if prev and UNIONES and not prev.get("ad") and re.search(f"[{LET}]$", prev["w"], re.I):
+                pcore = "".join(re.findall(f"[{LET}]", prev["w"].lower()))
+                core = "".join(re.findall(f"[{LET}]", t["w"].lower()))
+                u = UNIONES.get(LZ.clave(pcore + " " + core))
+                if u:
+                    lids = ids_manual(u[0]); used.update(lids)
+                    out[-1] = {"w": prev["w"] + " " + t["w"], "l": lids, "x": 1 if u[1] == "ok" else 2, "un": 1}
+                    cnt["palabra_separada"] += 1
+                    continue
+            out.append(t)
+        return out
+
     # --- TEI -> folios / versos / palabras
     body = open(f"{H}/Mueller_Corpus_2026_data/texts/tei/demel_{cfg['tei']}.tei.xml", encoding="utf-8").read()
     body = body[body.index("<body"):body.index("</body>")]
@@ -160,7 +179,7 @@ def construir(obra, cfg):
     seg_ids = []
     def flush():
         nonlocal verse
-        if verse and cur is not None: cur["lines"].append(unir_adverbios(verse))
+        if verse and cur is not None: cur["lines"].append(unir_separadas(unir_adverbios(verse)))
         verse = []
     used = set(); n_ver = 0; cnt = collections.Counter()
     for line in body.split("\n"):

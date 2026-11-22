@@ -89,6 +89,22 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
 .pie{max-width:72rem;margin:0 auto;padding:0 1.25rem 3rem;font-size:.88rem;line-height:1.5;color:var(--desk-soft)}
 .pie p{margin:.4rem 0;max-width:60rem}
 
+/* facsímil del manuscrito (solo obras con imágenes: meta.facsimil) */
+#facBtn{display:none}
+.facsimil{display:none;margin:0;padding:1rem .9rem;border-left:1px solid rgba(120,100,60,.35)}
+body.con-facsimil .facsimil{display:block}
+.facsimil-in{position:sticky;top:.6rem}
+.facsimil img{display:block;width:100%;max-height:calc(100vh - 4.5rem);object-fit:contain;background:#2a241c;border-radius:2px;cursor:zoom-in}
+.facsimil figcaption{margin-top:.4rem;font-size:.8rem;line-height:1.35;color:var(--ink-soft);font-style:italic}
+.facsimil .sin-img{padding:2rem 1rem;text-align:center;color:var(--ink-soft);font-style:italic}
+@media (min-width:1201px){
+  body.con-facsimil .hoja{max-width:120rem;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(19rem,.8fr)}
+}
+@media (max-width:1200px){
+  body.con-facsimil .facsimil{grid-column:1/-1;order:-1;border-left:0;border-bottom:1px solid rgba(120,100,60,.35)}
+  .facsimil-in{position:static}
+  .facsimil img{max-height:75vh}
+}
 @media (max-width:860px){
   body{font-size:18px}
   .hoja{grid-template-columns:1fr;border-radius:0}
@@ -112,12 +128,14 @@ dl.datos dd{margin:0;overflow-wrap:anywhere}
     <button id="ant" type="button" aria-label="Folio anterior">‹</button>
     <select id="selFolio" aria-label="Ir a un folio"></select>
     <button id="sig" type="button" aria-label="Folio siguiente">›</button>
+    <button id="facBtn" type="button" aria-pressed="false" title="Mostrar la imagen del folio del manuscrito">Ver manuscrito</button>
     <input id="q" type="search" placeholder="Buscar una palabra" aria-label="Buscar una forma o un lema" autocomplete="off">
   </div>
 </header>
 
 <main class="hoja">
   <section class="texto" id="texto" aria-label="Texto"></section>
+  <figure class="facsimil" id="facsimil" aria-label="Imagen del folio en el manuscrito"><div class="facsimil-in"><a id="facLink" target="_blank" rel="noopener"><img id="facImg" alt=""></a><figcaption id="facCap"></figcaption></div></figure>
   <aside class="glosa" id="glosa" aria-live="polite" aria-label="Glosa de la palabra elegida">
     <button class="glosa-cerrar" id="cerrar" type="button" aria-label="Cerrar la glosa">×</button>
     <div class="glosa-in" id="glosaIn"></div>
@@ -150,7 +168,7 @@ var EVO=window.HYS_EVO||{}, GLO=window.HYS_GLOSAS||{};
 var F=D.folios, LM=D.lemmas, M=D.meta||{};
 document.title="Hispanicus: "+M.obra;
 document.getElementById("obraTit").textContent=M.obra+(M.codice?" · "+M.codice:"");
-document.getElementById("fuenteObra").innerHTML=M.fuente_html||"";
+document.getElementById("fuenteObra").innerHTML=(M.fuente_html||"")+(M.facsimil&&M.facsimil.credito_html?" "+M.facsimil.credito_html:"");
 document.getElementById("metaDesc").setAttribute("content","Lector de "+M.obra+" con el léxico del Diccionario del Español Medieval electrónico: tocá una palabra para ver su lema, sus formas y desde cuándo se documenta.");
 var hayV=F.some(function(f){return f.lines.some(function(l){return l.some(function(t){return t.v;});});});
 var LET="a-záéíóúñçüſ";
@@ -205,7 +223,31 @@ function showFolio(i,focus){
   pie.appendChild(b1);pie.appendChild(b2);texto.appendChild(pie);
   selF.value=String(cur); $("ant").disabled=cur===0; $("sig").disabled=cur===F.length-1;
   try{history.replaceState(null,"","#fol="+f.n);}catch(e){}
+  facActualizar();
   if(focus){var t=texto.querySelector('.w[data-v="'+focus.v+'"][data-t="'+focus.t+'"]');if(t){pick(t);t.scrollIntoView({block:"center"});}}
+}
+/* ---------- facsímil ---------- */
+var FAC=M.facsimil||null;
+function facActualizar(){
+  if(!FAC||!document.body.classList.contains("con-facsimil"))return;
+  var n=F[cur].n, src=FAC.dir+n+".jpg", img=$("facImg");
+  img.alt="Manuscrito, fol. "+n; img.src=src; $("facLink").href=src;
+  img.onerror=function(){img.removeAttribute("src");$("facCap").textContent="No hay imagen para el fol. "+n+".";};
+  $("facCap").textContent="Fol. "+n+". "+FAC.credito;
+  if(cur+1<F.length){var pre=new Image();pre.src=FAC.dir+F[cur+1].n+".jpg";}
+}
+function facMostrar(on){
+  document.body.classList.toggle("con-facsimil",on);
+  $("facBtn").setAttribute("aria-pressed",on?"true":"false");
+  $("facBtn").textContent=on?"Ocultar manuscrito":"Ver manuscrito";
+  try{localStorage.setItem("hys-facsimil",on?"1":"0");}catch(e){}
+  facActualizar();
+}
+if(FAC){
+  $("facBtn").style.display="inline-block";
+  $("facBtn").onclick=function(){facMostrar(!document.body.classList.contains("con-facsimil"));};
+  var pref=null;try{pref=localStorage.getItem("hys-facsimil");}catch(e){}
+  if(pref==="1")document.body.classList.add("con-facsimil");
 }
 function go(i){showFolio(i);window.scrollTo({top:0});if(glosa.classList.contains("abierta")&&innerWidth<=860)glosa.classList.remove("abierta");}
 

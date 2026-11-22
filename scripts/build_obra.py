@@ -27,7 +27,11 @@ OBRAS = {
                  "edicion": "Anónimo, Cantar de mío Cid. Madrid: Nacional, Vitrina 7-17, copiado 1300-1400. Transcr. Steven Kirby. In: ADMYTE 0.",
                  "texto": "DEMel, corpus de textos t0103 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
                  "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
-                 "fuente_html": "Texto: <em>Cantar de mío Cid</em>, copia de 1300-1400 (BNE, Vitrina 7-17), transcripción de Steven Kirby en ADMYTE 0, tomada del corpus de textos del DEMel (" + A_DOI_TXT + ")."},
+                 "fuente_html": "Texto: <em>Cantar de mío Cid</em>, copia de 1300-1400 (BNE, Vitrina 7-17), transcripción de Steven Kirby en ADMYTE 0, tomada del corpus de textos del DEMel (" + A_DOI_TXT + ").",
+                 # imágenes de los folios: web/img/cid/<folio>.jpg, cortadas del PDF de la Biblioteca Digital Hispánica
+                 "facsimil": {"dir": "img/cid/",
+                              "credito": "Imagen procedente de los fondos de la Biblioteca Nacional de España (Vitr/7/17), CC BY 4.0.",
+                              "credito_html": "Imágenes del manuscrito: procedentes de los fondos de la Biblioteca Nacional de España (Vitr/7/17, <a href=\"https://www.bne.es/es/catalogos/biblioteca-digital-hispanica\">Biblioteca Digital Hispánica</a>), <a href=\"https://creativecommons.org/licenses/by/4.0/deed.es\">CC BY 4.0</a>."}},
     },
     "oria": {
         "tei": "t0120", "docs": "santa_oria_documentaciones.csv",

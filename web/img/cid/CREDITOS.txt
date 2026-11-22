@@ -1,0 +1,9 @@
+Imágenes de los folios del Cantar de mio Cid (Biblioteca Nacional de España, Vitr/7/17).
+
+Procedencia: Imágenes procedentes de los fondos de la Biblioteca Nacional de España.
+Tomadas del PDF de la Biblioteca Digital Hispánica (BNE_MSS_VITR717_Cantar_de_Mio_Cid.pdf).
+Licencia: Creative Commons Reconocimiento 4.0 (CC BY 4.0), según las normas de reutilización de la BNE.
+
+Cada imagen del PDF muestra el códice abierto (vuelto del folio anterior + recto del siguiente).
+Se cortaron por el medianil en un archivo por folio (1r.jpg ... 74v.jpg), a la resolución del
+escaneo (1254 px de alto), en JPEG calidad 72. Script: scripts/cortar_folios.py

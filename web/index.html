@@ -156,7 +156,7 @@ body.con-facsimil .facsimil{display:block}
   <p>Los números de verso cuentan las líneas de esta transcripción y pueden no coincidir con las ediciones impresas. Las fechas son los intervalos de datación de cada fuente en el DEMel, no años exactos. El DEMel reúne textos medievales: el «último registro» es la fecha más tardía que figura en su corpus, no indica que la palabra haya dejado de usarse.</p>
 </footer>
 
-<script src="data/evolucion.js?v=8"></script>
+<script src="data/evolucion.js?v=9"></script>
 <script>
 (function(){
 "use strict";
@@ -262,7 +262,10 @@ function facActualizar(){
   var n=F[cur].n, src=FAC.dir+n+".jpg", img=$("facImg");
   zReset(); img.alt="Manuscrito, fol. "+n; img.src=src; $("facLink").href=src;
   img.onerror=function(){img.removeAttribute("src");$("facCap").textContent="No hay imagen para el fol. "+n+".";};
-  $("facCap").textContent="Fol. "+n+". "+FAC.credito;
+  var v1=offs[cur]+1, v2=offs[cur]+F[cur].lines.length;
+  $("facCap").textContent="";
+  $("facCap").appendChild(el("strong",null,"Fol. "+n+" · versos "+v1+"–"+v2+". "));
+  $("facCap").appendChild(document.createTextNode(FAC.credito));
   if(cur+1<F.length){var pre=new Image();pre.src=FAC.dir+F[cur+1].n+".jpg";}
 }
 function facMostrar(on){

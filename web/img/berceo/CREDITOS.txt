@@ -1,0 +1,11 @@
+Imágenes de los folios de las Obras de Gonzalo de Berceo (Real Academia Española, Ms. 4a y 4b, códice F, s. XIV).
+
+Procedencia: Biblioteca digital de la Real Academia Española (Ms_4a.pdf y Ms_4b.pdf).
+Derechos: los documentos pertenecen a la Real Academia Española. Se reproducen con autorización
+de la RAE para un uso académico sin fines comerciales.
+
+Cada página del PDF es un folio. Se reescalaron a 1254 px de alto, en JPEG calidad 72, y se nombraron
+según los cambios de folio (<pb>) del TEI t0120 del DEMel. Solo se incluyen los folios de las obras
+que muestra Hispanicus: 48v-65v (Ms 4a: Santa Oria y San Millán) y 66r-113v (Ms 4b: Santo Domingo).
+En el Ms 4a faltan los fols. 30-31 (Milagros), por eso desde el fol. 32 la página del PDF es 2k-1.
+Script: scripts/folios_berceo.py

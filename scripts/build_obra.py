@@ -19,6 +19,10 @@ import lematizador
 LZ = lematizador
 
 A_DOI_TXT = '<a href="https://doi.org/10.18453/rosdok_id00005463">doi:10.18453/rosdok_id00005463</a>'
+# imágenes de los folios de Berceo: web/img/berceo/<folio>.jpg (RAE, Ms. 4a y 4b), ver web/img/berceo/CREDITOS.txt
+FAC_BERCEO = {"dir": "img/berceo/",
+              "credito": "Imagen: Real Academia Española, Ms. 4a-4b (códice F), reproducida con autorización de la RAE.",
+              "credito_html": "Imágenes del manuscrito: Real Academia Española, Ms. 4a y 4b (códice F), <a href=\"https://www.rae.es/archivo-digital/obras\">Biblioteca digital de la RAE</a>; reproducidas con autorización de la RAE para un uso académico sin fines comerciales."}
 OBRAS = {
     "cid": {
         "tei": "t0103", "docs": "cid_documentaciones.csv", "recorte": None,
@@ -42,7 +46,8 @@ OBRAS = {
                  "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
                  "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
                  "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
-                 "fuente_html": "Texto: <em>Vida de Santa Oria</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el pasaje de esa edición que corresponde a este poema (fols. 48v-60r), sin las demás obras de Berceo ni el epitafio final. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256."},
+                 "fuente_html": "Texto: <em>Vida de Santa Oria</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el pasaje de esa edición que corresponde a este poema (fols. 48v-60r), sin las demás obras de Berceo ni el epitafio final. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256.",
+                 "facsimil": FAC_BERCEO},
     },
     "reyes": {
         "tei": "t0006", "docs": "t0006_documentaciones.csv", "recorte": None,
@@ -61,7 +66,8 @@ OBRAS = {
                  "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
                  "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
                  "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
-                 "fuente_html": "Texto: <em>Vida de San Millán</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el fragmento de este poema que contiene esa edición (fols. 61r-65v; la edición del corpus es parcial y marca los saltos con [...]), sin las demás obras de Berceo. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256."},
+                 "fuente_html": "Texto: <em>Vida de San Millán</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el fragmento de este poema que contiene esa edición (fols. 61r-65v; la edición del corpus es parcial y marca los saltos con [...]), sin las demás obras de Berceo. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256.",
+                 "facsimil": FAC_BERCEO},
     },
     "domingo": {
         "tei": "t0120", "docs": "t0120_documentaciones.csv",
@@ -71,7 +77,8 @@ OBRAS = {
                  "edicion": "Gago Jover, Francisco (ed.). 2011. «Obras de Gonzalo de Berceo». Spanish Poetic Texts. Digital Library of Old Spanish Texts. Hispanic Seminary of Medieval Studies.",
                  "texto": "DEMel, corpus de textos t0120 (CC BY-SA 4.0), doi:10.18453/rosdok_id00005463",
                  "lexico": "DEMel, publicación de datos (CC BY-SA 4.0), doi:10.18453/rosdok_id00005462",
-                 "fuente_html": "Texto: <em>Vida de Santo Domingo de Silos</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el pasaje de esa edición que corresponde a este poema (fols. 66r-113v), sin las demás obras de Berceo. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256."},
+                 "fuente_html": "Texto: <em>Vida de Santo Domingo de Silos</em>, de Gonzalo de Berceo, según la edición de Francisco Gago Jover, «Obras de Gonzalo de Berceo» (2011), Spanish Poetic Texts, Hispanic Seminary of Medieval Studies (dominio público), tomada del corpus de textos del DEMel, texto t0120 (" + A_DOI_TXT + "). Se muestra el pasaje de esa edición que corresponde a este poema (fols. 66r-113v), sin las demás obras de Berceo. Las fechas del DEMel para las obras de Berceo son c. 1230-c. 1256.",
+                 "facsimil": FAC_BERCEO},
     },
 }
 
